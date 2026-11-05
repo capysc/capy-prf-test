@@ -1,0 +1,52 @@
+{
+  "stableUrl": "https://capy-prf-test.vercel.app/",
+  "deploymentId": "dpl_H3FfxqTKRHcBuFr4LhtHW5w6xnWA",
+  "deploymentUrl": "capy-prf-test-cimluufni-capy-f3acb629.vercel.app",
+  "readyState": "READY",
+  "target": "production",
+  "sourceRevision": "bfea61e300c03816f233ca43ce9c97c9d81de7b1",
+  "branch": "codex/standalone-prf-test",
+  "verifiedAt": "2026-11-05T03:29:43.604536+00:00",
+  "assets": [
+    {
+      "path": "/",
+      "status": 200,
+      "url": "https://capy-prf-test.vercel.app/",
+      "contentType": "text/html; charset=utf-8",
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
+      "sha256": "21e2bf3d0abaf2f68a813f51d3fce70e2f6e0a0cc1669629600a1d6d9a41329a"
+    },
+    {
+      "path": "/prf-test",
+      "status": 200,
+      "url": "https://capy-prf-test.vercel.app/prf-test",
+      "contentType": "text/html; charset=utf-8",
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
+      "sha256": "21e2bf3d0abaf2f68a813f51d3fce70e2f6e0a0cc1669629600a1d6d9a41329a"
+    },
+    {
+      "path": "/app.js",
+      "status": 200,
+      "url": "https://capy-prf-test.vercel.app/app.js",
+      "contentType": "application/javascript; charset=utf-8",
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
+      "sha256": "e6af6d8f1494cbeb83f9e081de8ee239364b7acb4f51eb09fd34f1d3b9b03d97"
+    },
+    {
+      "path": "/style.css",
+      "status": 200,
+      "url": "https://capy-prf-test.vercel.app/style.css",
+      "contentType": "text/css; charset=utf-8",
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
+      "sha256": "5e68828951c66654369a2d502abc46d2476a7e7a0a6ed30dcde84a572a84e387"
+    }
+  ],
+  "checks": {
+    "typecheck": "pass",
+    "cryptoTests": "5 pass, 27 assertions",
+    "build": "pass",
+    "uiTests": "not run, per user instruction",
+    "manualPasskeyAcceptance": "pending"
+  },
+  "requiredRetry": "explicit click after USER_NOT_VERIFIED; default remains preferred; actual UV mandatory"
+}
