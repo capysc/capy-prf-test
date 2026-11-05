@@ -67,7 +67,7 @@ export function PrfSmokeTest({ rpId }: { readonly rpId: string }) {
   const testId = view.step === 'transfer' || view.step === 'check' ? view.packet.testId
     : view.step === 'result' ? view.report.testId : null;
 
-  async function approve(checkingUserVerification: PrfVerificationPolicy = 'preferred'): Promise<void> {
+  async function approve(userVerification: PrfVerificationPolicy = 'preferred'): Promise<void> {
     if (status.busy || (view.step !== 'create' && view.step !== 'encrypt' && view.step !== 'check')) return;
     setStatus({ busy: true });
     try {
@@ -76,8 +76,8 @@ export function PrfSmokeTest({ rpId }: { readonly rpId: string }) {
       const next: View = view.step === 'create'
         ? { step: 'encrypt', device: view.device, credentialId: await createSmokeCredential(rpId) }
         : view.step === 'encrypt'
-          ? { step: 'transfer', packet: await createUnifiedPrfTest(rpId, view.credentialId, view.device) }
-          : { step: 'result', report: await checkUnifiedPrfTest(rpId, view.packet, view.device, navigator.credentials, checkingUserVerification) };
+          ? { step: 'transfer', packet: await createUnifiedPrfTest(rpId, view.credentialId, view.device, navigator.credentials, userVerification) }
+          : { step: 'result', report: await checkUnifiedPrfTest(rpId, view.packet, view.device, navigator.credentials, userVerification) };
       setView(next);
       setStatus({ busy: false });
     } catch (error) {
@@ -145,6 +145,10 @@ export function PrfSmokeTest({ rpId }: { readonly rpId: string }) {
       <p>The disposable passkey is ready. Approve it once more to encrypt the test message twice: once with the original-input output, and once with the extra-hashed-input output.</p>
       <p>Use the same passkey and the same provider/path you used to create it.</p>
       <Controls><Button busy={status.busy} onClick={() => void approve()}>Encrypt both cases and prepare test</Button></Controls>
+      {status.code === 'USER_NOT_VERIFIED' ? <>
+        <p>Retry the encryption approval with user verification explicitly required. This uses the same disposable passkey; no new passkey is created. The original approval requests preferred verification.</p>
+        <Controls><Button busy={status.busy} onClick={() => void approve('required')}>Retry with required verification</Button></Controls>
+      </> : null}
     </> : null}
 
     {view.step === 'transfer' ? <>

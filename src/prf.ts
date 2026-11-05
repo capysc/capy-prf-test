@@ -22,7 +22,7 @@ export type PrfUnifiedTest = Readonly<{
   testId?: string;
   rpId: string;
   sourceDevice: PrfTestDevice;
-  sourceUserVerification?: 'preferred';
+  sourceUserVerification?: PrfVerificationPolicy;
   sample: string;
   hashedSample?: string;
   sourceResult: PrfTestResult;
@@ -39,7 +39,7 @@ export type PrfUnifiedReport = Readonly<{
   credentialId: string;
   sourceDevice: PrfTestDevice;
   checkingDevice: PrfTestDevice;
-  sourceUserVerification: 'preferred' | null;
+  sourceUserVerification: PrfVerificationPolicy | null;
   checkingUserVerification: PrfVerificationPolicy;
   sourceUserVerified: true | null;
   checkingUserVerified: true;
@@ -128,9 +128,9 @@ async function resultFor(sample: Sample, key: CryptoKey, output: Uint8Array<Arra
   return { userVerified: true, prfHex: hex(output), hashedInputPrfHex: second ? hex(second) : null, opensTest, hashedInputOpensTest };
 }
 
-export async function createUnifiedPrfTest(rpId: string, credentialId: string, device: PrfTestDevice, api: NativeCredentials = navigator.credentials): Promise<PrfUnifiedTest> {
+export async function createUnifiedPrfTest(rpId: string, credentialId: string, device: PrfTestDevice, api: NativeCredentials = navigator.credentials, sourceUserVerification: PrfVerificationPolicy = 'preferred'): Promise<PrfUnifiedTest> {
   // evaluate reaches native get before its first await (iOS user activation).
-  const { key, output, second } = await evaluate(rpId, credentialId, api);
+  const { key, output, second } = await evaluate(rpId, credentialId, api, sourceUserVerification);
   const secondKey = second ? await crypto.subtle.importKey('raw', second, 'AES-GCM', false, ['encrypt', 'decrypt']) : null;
   const [sample, hashedSample] = await Promise.all([
     sealMessage(credentialId, key),
@@ -138,7 +138,7 @@ export async function createUnifiedPrfTest(rpId: string, credentialId: string, d
   ]);
   const sourceResult = await resultFor(sample, key, output, second);
   if (!sourceResult.opensTest || (hashedSample && secondKey && !await opensMessage(hashedSample, secondKey))) throw new Error('LOCAL_ENCRYPTION_FAILED');
-  return { v: 2, testId: `PRF-${crypto.randomUUID().slice(0, 8).toUpperCase()}`, rpId, sourceDevice: device, sourceUserVerification: 'preferred', sample: JSON.stringify(sample), sourceResult,
+  return { v: 2, testId: `PRF-${crypto.randomUUID().slice(0, 8).toUpperCase()}`, rpId, sourceDevice: device, sourceUserVerification, sample: JSON.stringify(sample), sourceResult,
     ...(hashedSample ? { hashedSample: JSON.stringify(hashedSample) } : {}) };
 }
 
@@ -157,7 +157,7 @@ export function parseUnifiedPrfTest(rpId: string, text: string): PrfUnifiedTest 
   if (packet?.v !== 2 || typeof packet.rpId !== 'string' || (packet.sourceDevice !== 'phone' && packet.sourceDevice !== 'desktop')
     || typeof packet.sample !== 'string' || !validResult(packet.sourceResult)
     || (packet.testId !== undefined && (typeof packet.testId !== 'string' || !/^PRF-[0-9A-F]{8}$/.test(packet.testId)))
-    || (packet.sourceUserVerification !== undefined && packet.sourceUserVerification !== 'preferred')) throw new Error('INVALID_TEST');
+    || (packet.sourceUserVerification !== undefined && packet.sourceUserVerification !== 'preferred' && packet.sourceUserVerification !== 'required')) throw new Error('INVALID_TEST');
   if (packet.rpId !== rpId) throw new Error('TEST_DOMAIN_MISMATCH');
   const sample = readSample(packet.sample);
   if (packet.hashedSample !== undefined) {

@@ -81,3 +81,20 @@ test('a separate required-verification check preserves the packet and records it
   const report = await pending;
   expect(report).toMatchObject({ testId: packet.testId, sourceUserVerification: 'preferred', checkingUserVerification: 'required', sourceUserVerified: true, checkingUserVerified: true, checkingResult: { opensTest: true } });
 });
+
+
+test('a required creator assertion reuses the credential and survives packet parsing into consumer policy metadata', async () => {
+  const source = driver(first, second);
+  const pending = createUnifiedPrfTest(rp, id, 'desktop', source, 'required');
+  expect(source.create).toHaveBeenCalledTimes(0);
+  expect(source.get).toHaveBeenCalledTimes(1);
+  expect(source.get.mock.calls[0][0]?.publicKey?.userVerification).toBe('required');
+  expect(source.get.mock.calls[0][0]?.publicKey?.allowCredentials).toEqual([{ type: 'public-key', id: Uint8Array.from(Buffer.from(id, 'base64url')) }]);
+  const packet = parseUnifiedPrfTest(rp, JSON.stringify(await pending));
+  expect(packet.sourceUserVerification).toBe('required');
+  const report = await checkUnifiedPrfTest(rp, packet, 'phone', driver(first, second));
+  expect(report).toMatchObject({ sourceUserVerification: 'required', checkingUserVerification: 'preferred', sourceUserVerified: true, checkingUserVerified: true });
+  expect(report.decryptionCases.map((entry) => entry.opensTest)).toEqual([true, false, false, true]);
+  const noUv = { ...driver(), get: async () => ({ ...credential(first), response: { authenticatorData: new Uint8Array(37).buffer } }) as unknown as Credential };
+  await expect(createUnifiedPrfTest(rp, id, 'desktop', noUv, 'required')).rejects.toThrow('USER_NOT_VERIFIED');
+});
