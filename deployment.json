@@ -1,14 +1,14 @@
 {
   "stableUrl": "https://passkey-lab.capy.sc/",
-  "deploymentId": "dpl_F61e3VLJXjreRyvFuAEb5kkN6T5w",
+  "deploymentId": "dpl_3WUQCCTQYpzYM9BMQqiW6VKugd6C",
   "readyState": "READY",
-  "sourceRevision": "42e77e42d7fa1da6d933d86d3b1d3751ebb14aae",
+  "sourceRevision": "a898938c5770e951c71e209251ad5d230df3a216",
   "branch": "codex/standalone-prf-test",
   "repository": "https://github.com/capysc/capy-prf-test",
   "gitTriggered": true,
   "keepSource": "capysc/keep-app",
   "keepRevision": "f6765478b424c2aaffb28d6c11d0358849604310",
-  "verifiedAt": "2026-11-05T04:14:24.504535+00:00",
+  "verifiedAt": "2026-11-05T04:20:52.873385+00:00",
   "assets": [
     {
       "path": "/",
@@ -18,7 +18,7 @@
     {
       "path": "/app.js",
       "status": 200,
-      "sha256": "883abf5e2c1f01c5d4b824a967150db6b267555313130cabf49d6a1849b6cbf3"
+      "sha256": "023187234bcd4f85a85e5b885b447a0a37c6cf160783d0e9e3af0706dd6b33d1"
     },
     {
       "path": "/style.css",
@@ -29,7 +29,7 @@
   "checks": {
     "typecheck": "pass",
     "build": "pass",
-    "coreTests": "6 pass,35 assertions",
+    "crypto": "unchanged; previous6tests35assertions",
     "uiBrowserTests": "not run per user instruction"
   },
   "recordKind": "verified application source snapshot; later metadata-only commits do not alter application assets",

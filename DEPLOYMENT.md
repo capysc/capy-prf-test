@@ -3,8 +3,8 @@
 - Stable test URL: https://passkey-lab.capy.sc/
 - Vercel project: `capy-prf-test`, independent of Keep.
 - Branch: `codex/standalone-prf-test`.
-- Deployed application source: `42e77e42d7fa1da6d933d86d3b1d3751ebb14aae`.
-- Deployment: `dpl_F61e3VLJXjreRyvFuAEb5kkN6T5w`, `READY`.
+- Deployed application source: `a898938c5770e951c71e209251ad5d230df3a216`.
+- Deployment: `dpl_3WUQCCTQYpzYM9BMQqiW6VKugd6C`, `READY`.
 - This test project's production target provides its public stable address. The custom test domain is `passkey-lab.capy.sc`; no Capy product deployment was changed.
 - Full verified application snapshot and asset SHA-256 values: `deployment.json`.
 - Private source: `https://github.com/capysc/capy-prf-test`.
@@ -25,7 +25,7 @@ The application correction is deployed and verified. The previous blog-styled de
 
 ## Verification-policy experiment
 
-Enrollment requires verification. The later source assertion and default consumer assertion continue requesting `preferred`, and the code rejects either without actual UV. A creator encryption or consumer check `USER_NOT_VERIFIED` failure exposes **Retry with required verification**. This separate button directly starts one native request with `required`. Creator retry retains the current enrolled credential; consumer retry retains the packet and Test ID. Enrollment is not repeated. A page refresh clears in-memory state, so this preservation applies within the currently loaded test. Successful reports record the source assertion policy, checking policy, and actual UV. There is no automatic retry, provider detection, changed default, or crypto result after an unverified assertion.
+Enrollment requires verification. The later source assertion and default consumer assertion continue requesting `preferred`, and the code rejects either without actual UV. Creator encryption and consumer checks always offer an explicit required-verification alternative. Following `USER_NOT_VERIFIED`, that alternative is labeled **Retry with required verification**. This separate button directly starts one native request with `required`. Creator retry retains the current enrolled credential; consumer retry retains the packet and Test ID. Enrollment is not repeated. A page refresh clears in-memory state, so this preservation applies within the currently loaded test. Successful reports record the source assertion policy, checking policy, and actual UV. There is no automatic retry, provider detection, changed default, or crypto result after an unverified assertion. **Check on this device** runs a loaded packet on its creator device; **Check again** retains the same packet after a result so policies can be compared without re-enrollment. This is distinct from a QR cross-device test. The lab uses plain `prf.eval` already and therefore compares UV policies rather than recreating all differences in the historical 1Password request. Current providers may no longer reproduce that historical failure.
 
 ## Domain and previous evidence
 
