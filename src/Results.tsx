@@ -93,8 +93,7 @@ export function ResultsPage() {
           <dt><code>P(x)</code></dt><dd>The encryption key the phone returns for the original input.</dd>
           <dt><code>P(D(x))</code></dt><dd>The different key the phone returns when given the hashed input.</dd>
         </dl>
-        <p><strong>In simpler terms:</strong> the phone and QR routes returned different keys for the same passkey. In the failing tests, the QR route behaved as though the input had been hashed an extra time. That changed the key, so data encrypted on one route could not be unlocked normally on the other.</p>
-        <p>The extra-hashed test helps identify this mismatch. Compatible implementations should return the same key for the same passkey and input on both routes.</p>
+        <p><strong>In simpler terms:</strong> the finding is inconsistent input hashing in the tested 1Password QR flow. QR behaves as though the input is hashed one extra time compared with local Safari, producing a different encryption key and preventing data encrypted through one path from opening through the other.</p>
       </div>
       <p className="results-note"><strong>Vendor ownership is unconfirmed.</strong> The QR and direct runs used different origins and credentials. The investigation should check the raw-versus-already-hashed hand-off: <a href="https://github.com/1Password/passkey-rs/blob/1606717bd9888b629905d435bb876b24b1aaddb5/passkey-types/src/webauthn/extensions/mod.rs#L36">1Password’s Apple input contract</a> and <a href="https://chromium.googlesource.com/chromium/src/+/main/ios/chrome/credential_provider_extension/passkey_util.mm#37">Chromium’s iOS adapter</a> identify relevant public boundaries, not proof of the installed bug’s owner.</p>
     </section>
