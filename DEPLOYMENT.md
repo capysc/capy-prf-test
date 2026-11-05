@@ -1,4 +1,4 @@
-# Capy Passkey Lab deployment
+# Passkey Lab deployment
 
 - Stable test URL: https://capy-prf-test.vercel.app/
 - Vercel project: `capy-prf-test`, independent of Keep.
@@ -9,7 +9,7 @@
 - Full verified application snapshot and asset SHA-256 values: `deployment.json`.
 - Private source: `https://github.com/capysc/capy-prf-test`.
 - Vercel Git link: `capysc/capy-prf-test` (repository ID `1446488784`), production branch `codex/standalone-prf-test`, project ID `prj_gLAwTlMfRD96TyH1MCzbLfsx7vKw`.
-- The Keep styling and Capy Passkey Lab title deployed through the Git integration. Vercel records the exact application source SHA and READY deployment above; the stable URL serves byte-identical build assets. No duplicate CLI deployment was started.
+- The Keep styling and Passkey Lab title deployed through the Git integration. Vercel records the exact application source SHA and READY deployment above; the stable URL serves byte-identical build assets. No duplicate CLI deployment was started.
 
 ## Verification
 

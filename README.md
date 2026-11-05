@@ -1,4 +1,4 @@
-# Capy Passkey Lab
+# Passkey Lab
 
 A static, browser-only extraction of the disposable test from Keep revision `f6765478b424c2aaffb28d6c11d0358849604310`. No Keep dependency, sign-in, backend, storage, analytics, or environment secrets.
 
