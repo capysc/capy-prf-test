@@ -116,8 +116,8 @@ export function PrfSmokeTest({ rpId }: { readonly rpId: string }) {
   }
 
   return <Page title="Passkey Lab" lockup="none">
-    <p>Compare the encryption keys returned by the same disposable passkey across browsers, devices, and password managers.</p>
-    <p>One approval generates two encryption keys: one from the original input and one from an extra-hashed input. Each key encrypts a copy of the same message. The other device then tries its two keys against both copies—four checks in total.</p>
+    <p>This lab checks whether data encrypted with a passkey on one device can be unlocked with that same passkey on another.</p>
+    <p>A successful sign-in doesn’t guarantee matching encryption keys. Use a disposable passkey to find compatibility gaps between browsers, password managers and phone QR flows, and help vendors fix them.</p>
     <p className="step"><strong>{STEP_LABELS[view.step]}</strong>{device ? ` · ${DEVICE_LABELS[device]}` : ''}</p>
     {testId ? <p className="test-id"><strong>Test ID: {testId}</strong> · Confirm this same ID appears on both devices.</p> : null}
 
