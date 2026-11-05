@@ -117,7 +117,7 @@ export function PrfSmokeTest({ rpId }: { readonly rpId: string }) {
 
   return <Page title="Passkey Lab" lockup="none">
     <p>Compare the encryption keys returned by the same disposable passkey across browsers, devices, and password managers.</p>
-    <p>One approval reads both the original input and an extra-hashed input. New tests encrypt a message with each output and check all four combinations on the other device.</p>
+    <p>One approval generates two encryption keys: one from the original input and one from an extra-hashed input. Each key encrypts a copy of the same message. The other device then tries its two keys against both copies—four checks in total.</p>
     <p className="step"><strong>{STEP_LABELS[view.step]}</strong>{device ? ` · ${DEVICE_LABELS[device]}` : ''}</p>
     {testId ? <p className="test-id"><strong>Test ID: {testId}</strong> · Confirm this same ID appears on both devices.</p> : null}
 

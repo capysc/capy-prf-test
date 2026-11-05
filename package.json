@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "bun build src/main.tsx --outdir dist --entry-naming app.js --target browser --minify && cp public/index.html public/style.css dist/ && bun run scripts/build-results.tsx",
+    "build": "bun build src/main.tsx --outdir dist --entry-naming app.js --target browser --minify && cp public/index.html public/style.css public/octicons-license.txt dist/ && bun run scripts/build-results.tsx",
     "typecheck": "tsc --noEmit",
     "test": "bun test tests/"
   },
