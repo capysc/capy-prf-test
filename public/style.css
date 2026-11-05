@@ -847,7 +847,7 @@ a { color: var(--link-color); text-decoration: none; }
 .cell-secondary, .column-detail { display: block; color: var(--faint); font-weight: 400; }
 .cell-secondary { margin-top: var(--space-1); }
 .column-detail { margin-top: var(--space-1); }
-.test-number { display: inline-block; font-size: inherit; font-variant-numeric: tabular-nums; text-decoration: none; scroll-margin-top: var(--space-6); }
+.comparison-table tbody th { font-variant-numeric: tabular-nums; scroll-margin-top: var(--space-6); }
 .verification-required { color: var(--result-fail-ink); font-weight: 600; }
 .results-page code { font-size: inherit; }
 .key-cell { white-space: nowrap; }

@@ -71,7 +71,9 @@ export function ResultsPage() {
   return <Page title="Passkey Lab" results>
     <section className="results-section" aria-labelledby="comparison-heading">
       <div className="section-heading"><h2 id="comparison-heading">The full comparison</h2></div>
-      <p className="section-description">Each row shows a test between two devices: the Creator encrypts a message, and the Consumer tries to open it. The table records their browsers, password managers, keys and result.</p>
+      <p className="section-description">This table shows whether data encrypted with a passkey can still be unlocked when that same passkey is used on another device, in another browser or through a phone QR flow.</p>
+      <p className="section-description">For apps that use passkeys to protect encrypted data, a successful sign-in is not enough. If the browser or password manager returns a different encryption key, the data stays locked on that device.</p>
+      <p className="section-description">Each row is one setup we tested. The Creator encrypted a message; the Consumer tried to open it using the same passkey. The result shows whether that setup worked out of the box, needed changes or failed.</p>
       <div className="results-note">
         <p><strong>Reading the keys</strong></p>
         <dl className="key-legend">
@@ -88,7 +90,7 @@ export function ResultsPage() {
           <caption>Latest results: <time dateTime={LATEST_RESULTS_DATE}>November 4, 2026</time> (Pacific).</caption>
           <thead><tr><th scope="col">Test</th><th scope="col">Creator</th><th scope="col">Consumer</th><th scope="col">Requested verification<br /><span className="column-detail">Creator → Consumer</span></th><th scope="col">Creator key</th><th scope="col">Consumer key</th><th scope="col">Outcome</th><th scope="col">Vendor follow-up / proposed fix</th></tr></thead>
           <tbody>{comparisons.map((test) => <tr key={test.number}>
-            <th scope="row"><a href={`#test-${test.number}`} id={`test-${test.number}`} className="test-number">{String(test.number).padStart(2, '0')}</a></th>
+            <th scope="row" id={`test-${test.number}`}>{String(test.number).padStart(2, '0')}</th>
             <td><Path value={test.creator} /></td><td><Path value={test.consumer} /></td>
             <td className="verification-cell"><Policy value={test.verification[0]} /><span className="cell-secondary">→ <Policy value={test.verification[1]} /></span></td>
             <td className="key-cell"><code>{test.creatorKey}</code></td><td className="key-cell"><code>{test.consumerKey}</code></td>
