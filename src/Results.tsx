@@ -106,7 +106,7 @@ export function ResultsPage() {
 
     <section className="results-section contribution-section" aria-labelledby="contribution-heading">
       <div className="section-heading"><h2 id="contribution-heading">Contributing</h2></div>
-      <p>Help broaden the evidence with another browser, password manager or access path, or contribute a correction or code improvement.</p>
+      <p>Help broaden the evidence with another browser, password manager or access path.</p>
       <ul>
         <li>Include the date, origin, device and software versions, creator/consumer paths and native provider-selection route.</li>
         <li>Record requested verification and actual UV on both devices, plus all four decryption verdicts. Report native popups and app errors separately when no comparison completed.</li>

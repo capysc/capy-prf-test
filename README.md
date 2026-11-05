@@ -33,41 +33,32 @@ The extra-hashed input is a diagnostic probe. The lab does not automatically
 adjust inputs by provider, compensate for mismatches or use copied source
 keys to make the receiving device appear successful.
 
-## Findings so far
+## Findings summary
 
 Latest results: **November 4, 2026**.
 
-| Provider | Direct paths | Phone QR paths |
-| --- | --- | --- |
-| 1Password | Safari ↔ Chrome extension passed in both directions. | Earlier runs showed a relative input-hashing shift in both directions. |
-| Apple Passwords | Both directions passed. | Both directions passed. |
-| Chrome Password Manager | Both directions passed with required verification on desktop. | An earlier unnumbered run reported a relative input-hashing shift. |
+| Provider / path | Finding |
+| --- | --- |
+| 1Password · Safari ↔ Chrome QR | Original-input keys differed in both directions; cross-input decryption exposed a relative input-hashing shift. |
+| 1Password · Safari ↔ Chrome extension directly | Keys matched and decryption passed in both directions. |
+| Apple Passwords · Safari ↔ Chrome QR | Keys matched and decryption passed in both directions. |
+| Apple Passwords · Safari ↔ desktop Chrome directly | Keys matched and decryption passed in both directions. |
+| Chrome Password Manager · phone Chrome ↔ desktop Chrome directly | Keys matched and decryption passed in both directions with required verification on desktop; earlier preferred attempts lacked actual UV. |
+| Chrome Password Manager · phone → Chrome QR | An earlier unnumbered run reported a relative input-hashing shift; no complete numbered matrix was supplied for this path. |
 
-The numbered comparisons and full four-case matrices are on the
-[results page](https://passkey-lab.capy.sc/results).
+[Full results and four-case decryption matrices](https://passkey-lab.capy.sc/results)
 
-The direct 1Password results show that the observed failure is not universal
-to 1Password or cross-device PRF. Its QR/provider hand-off deserves investigation,
-but responsibility between 1Password, Apple's bridge and Chrome is unconfirmed.
-Historical QR runs and later direct runs used different origins and credentials;
-they are not a same-credential control isolating route alone.
-
-Verification failures are a separate finding. Some desktop Chrome Password
-Manager attempts under preferred verification lacked actual UV; explicit
-required attempts passed. Preferred permits an unverified response, so this
-alone does not establish a vendor bug. A later 1Password extension run used
-required without establishing that preferred had failed.
-
-Provider and selection-route labels come from the tester's reported setup;
-the JSON does not attest which provider interface or transport was used.
-These findings describe tested combinations, not every installation.
+These findings describe reported setups. Historical QR and later direct runs
+used different origins and credentials, so they do not isolate route alone or
+identify the responsible vendor. Native verification failures are recorded
+separately from encryption mismatches. The full results retain those details.
 
 ## Contributing
 
-Help broaden the evidence or make the experiment easier to understand and
-reproduce. Share a sanitized finding in a
+Help broaden the evidence with another browser, password manager or access
+path. Share a sanitized finding in a
 [GitHub issue](https://github.com/capysc/capy-prf-test/issues/new), or open a pull
-request with a correction, a new comparison or an implementation improvement.
+request adding a comparison.
 
 A useful result includes:
 
@@ -83,13 +74,6 @@ A useful result includes:
 **Do not post complete copied packets or reports.** They contain disposable
 PRF outputs and credential identifiers. Share only sanitized metadata and
 verdicts, never real-account credentials or encryption material.
-
-For code contributions, preserve human-controlled native approval and actual-UV
-checks. Comparison data and dates live in `src/Results.tsx`. Use the existing
-style tokens and immutable TypeScript values. Run `bun run typecheck`,
-`bun test` and `bun run build` before submitting. Automated checks cover
-synthetic crypto; native provider behavior is verified manually, without
-browser/UI tests.
 
 ## Privacy and scope
 
