@@ -826,7 +826,7 @@ a:hover { text-decoration-thickness: 2px; }
 .section-heading > span { font-size: var(--results-text); color: var(--faint); }
 .section-description { color: var(--faint); max-width: var(--measure-wide); }
 .table-scroll { overflow-x: auto; border: 1px solid var(--line-strong); border-radius: var(--radius); background: var(--foreground); }
-.results-page table { width: 100%; border-spacing: 0; font-size: var(--results-text); text-align: left; }
+.results-page table { width: 100%; border-spacing: 0; font-size: var(--text-sm); text-align: left; }
 .results-page caption { text-align: left; color: var(--faint); padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--line); }
 .results-page th, .results-page td { padding: var(--space-4); vertical-align: top; border-bottom: 1px solid var(--line); }
 .results-page thead th { background: var(--foreground-raised); font-weight: 600; border-bottom-color: var(--line-strong); }
