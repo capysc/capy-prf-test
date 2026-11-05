@@ -1,46 +1,36 @@
 {
   "stableUrl": "https://passkey-lab.capy.sc/",
-  "deploymentId": "dpl_4zd3iXNvNvyvE6xUDzuGZJWaLyqx",
+  "deploymentId": "dpl_F61e3VLJXjreRyvFuAEb5kkN6T5w",
   "readyState": "READY",
-  "sourceRevision": "27b226853aebe823cd4f77937543d3b392961cdb",
+  "sourceRevision": "42e77e42d7fa1da6d933d86d3b1d3751ebb14aae",
   "branch": "codex/standalone-prf-test",
   "repository": "https://github.com/capysc/capy-prf-test",
   "gitTriggered": true,
   "keepSource": "capysc/keep-app",
   "keepRevision": "f6765478b424c2aaffb28d6c11d0358849604310",
-  "verifiedAt": "2026-11-05T04:06:40.528366+00:00",
+  "verifiedAt": "2026-11-05T04:14:24.504535+00:00",
   "assets": [
     {
       "path": "/",
       "status": 200,
-      "sha256": "4bab7d19df1003e2a8b498995a3c43b98234eb71cc1b04dc540cb5ed2dfbaae2",
-      "contentType": "text/html; charset=utf-8"
+      "sha256": "4bab7d19df1003e2a8b498995a3c43b98234eb71cc1b04dc540cb5ed2dfbaae2"
     },
     {
       "path": "/app.js",
       "status": 200,
-      "sha256": "bdac8bba893acf197e76c1dc01e169916e74b33d5a553ac91d1454d811d73e5e",
-      "contentType": "application/javascript; charset=utf-8"
+      "sha256": "883abf5e2c1f01c5d4b824a967150db6b267555313130cabf49d6a1849b6cbf3"
     },
     {
       "path": "/style.css",
       "status": 200,
-      "sha256": "bb6b2f5effe2f0f08e6426f16e930f2054ff6247e130b1fe01825f2501fcbfcb",
-      "contentType": "text/css; charset=utf-8"
-    },
-    {
-      "path": "/prf-test",
-      "status": 200,
-      "sha256": "4bab7d19df1003e2a8b498995a3c43b98234eb71cc1b04dc540cb5ed2dfbaae2",
-      "contentType": "text/html; charset=utf-8"
+      "sha256": "bb6b2f5effe2f0f08e6426f16e930f2054ff6247e130b1fe01825f2501fcbfcb"
     }
   ],
   "checks": {
     "typecheck": "pass",
     "build": "pass",
-    "crypto": "unchanged; previous 5 pass, 27 assertions retained",
-    "uiBrowserTests": "not run per user instruction",
-    "manualAcceptance": "pending"
+    "coreTests": "6 pass,35 assertions",
+    "uiBrowserTests": "not run per user instruction"
   },
   "recordKind": "verified application source snapshot; later metadata-only commits do not alter application assets",
   "domainVerifiedAt": "2026-11-05T04:08:29.159836+00:00",

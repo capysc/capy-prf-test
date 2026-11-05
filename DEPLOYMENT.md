@@ -3,9 +3,9 @@
 - Stable test URL: https://passkey-lab.capy.sc/
 - Vercel project: `capy-prf-test`, independent of Keep.
 - Branch: `codex/standalone-prf-test`.
-- Deployed application source: `27b226853aebe823cd4f77937543d3b392961cdb`.
-- Deployment: `dpl_4zd3iXNvNvyvE6xUDzuGZJWaLyqx`, `READY`.
-- This test project's production target provides its public stable address. No Capy product deployment, existing alias, or DNS was changed.
+- Deployed application source: `42e77e42d7fa1da6d933d86d3b1d3751ebb14aae`.
+- Deployment: `dpl_F61e3VLJXjreRyvFuAEb5kkN6T5w`, `READY`.
+- This test project's production target provides its public stable address. The custom test domain is `passkey-lab.capy.sc`; no Capy product deployment was changed.
 - Full verified application snapshot and asset SHA-256 values: `deployment.json`.
 - Private source: `https://github.com/capysc/capy-prf-test`.
 - Vercel Git link: `capysc/capy-prf-test` (repository ID `1446488784`), production branch `codex/standalone-prf-test`, project ID `prj_gLAwTlMfRD96TyH1MCzbLfsx7vKw`.
@@ -13,19 +13,19 @@
 
 ## Verification
 
-Typecheck and build passed after restyling. The crypto implementation is unchanged; the existing five focused crypto tests with 27 assertions remain the prior verification evidence. HTTP verification confirmed the root, `/prf-test` alias, JavaScript, and stylesheet return 200 without authentication. The served JavaScript contains the requested Phone/Desktop/Check Passkey Equality labels, visible Test IDs, and explicit verification retry. Self-only script/style CSP and no application connections are retained.
+Typecheck, build and six focused core tests with 35 assertions pass. Creator and consumer policy retries preserve the encryption algorithm and enforce actual UV. HTTP verification confirmed the root, `/prf-test` alias, JavaScript, and stylesheet return 200 without authentication. The served JavaScript contains the requested Phone/Desktop/Check Passkey Equality labels, visible Test IDs, and explicit verification retry. Self-only script/style CSP and no application connections are retained.
 
 The stylesheet was verified at the public URL and matches the built Keep kit styles byte for byte. No bundled or remote fonts are used. The neutral Phone/Desktop/Check Passkey Equality controls and explicit UV retry remain in the served JavaScript. No browser/UI tests or human passkey ceremonies were performed. Manual phone/desktop acceptance remains pending.
 
 ## Keep visual provenance
 
-The user selected Keep styling. The standalone app reuses `capysc/keep-app` at `f6765478b424c2aaffb28d6c11d0358849604310`, inspected read-only at `/private/tmp/capy-staging-desktop-transport-20261103`. References are `src/lib/ui/canonical/kit-tokens.css`, `kit-base.css`, and the native `Page`, `Button`, `Controls`, `Field`, `MessageBox`, `SquareLogo`, and `Mark` kit components. The visible heading and document title are **Passkey Lab**, with the actual Capy square logo at the top left. Keep uses a system font stack, so no bundled or remote font is needed. The prior blog look and font assets have been removed. Test behavior and crypto source remain unchanged.
+The user selected Keep styling. The standalone app reuses `capysc/keep-app` at `f6765478b424c2aaffb28d6c11d0358849604310`, inspected read-only at `/private/tmp/capy-staging-desktop-transport-20261103`. References are `src/lib/ui/canonical/kit-tokens.css`, `kit-base.css`, and the native `Page`, `Button`, `Controls`, `Field`, `MessageBox`, `SquareLogo`, and `Mark` kit components. The visible heading and document title are **Passkey Lab**, with the actual Capy square logo at the top left. Keep uses a system font stack, so no bundled or remote font is needed. The prior blog look and font assets have been removed. The visual changes preserve the test behavior; the later explicit verification retry is documented below.
 
 The application correction is deployed and verified. The previous blog-styled deployment was `dpl_2dQfVJArHTmLM1i9xGLsrvcrL5gm` at `c8dc7a635bef662cef43a25d4ed0b8b72d59d62c`; it is superseded.
 
 ## Verification-policy experiment
 
-Enrollment requires verification. The later source assertion and default consumer assertion continue requesting `preferred`, and the code rejects either without actual UV. Only a consumer `USER_NOT_VERIFIED` failure exposes **Retry with required verification**. This separate button directly starts one native request with `required`, retaining the packet and Test ID. Successful reports record the source assertion policy, checking policy, and actual UV. There is no automatic retry, provider detection, changed default, or crypto result after an unverified assertion.
+Enrollment requires verification. The later source assertion and default consumer assertion continue requesting `preferred`, and the code rejects either without actual UV. A creator encryption or consumer check `USER_NOT_VERIFIED` failure exposes **Retry with required verification**. This separate button directly starts one native request with `required`. Creator retry retains the current enrolled credential; consumer retry retains the packet and Test ID. Enrollment is not repeated. A page refresh clears in-memory state, so this preservation applies within the currently loaded test. Successful reports record the source assertion policy, checking policy, and actual UV. There is no automatic retry, provider detection, changed default, or crypto result after an unverified assertion.
 
 ## Domain and previous evidence
 
