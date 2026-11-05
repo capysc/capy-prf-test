@@ -118,6 +118,15 @@ export function PrfSmokeTest({ rpId }: { readonly rpId: string }) {
   return <Page title="Passkey Lab" lockup="none">
     <p>This lab checks whether data encrypted with a passkey on one device can be unlocked with that same passkey on another.</p>
     <p>A successful sign-in doesn’t guarantee matching encryption keys. Use a disposable passkey to find compatibility gaps between browsers, password managers and phone QR flows, and help vendors fix them.</p>
+    <details className="usage-guide" open={view.step === 'device'}>
+      <summary>How to use</summary>
+      <ol className="usage-steps">
+        <li>On the first device, choose <strong>Phone</strong> or <strong>Desktop</strong>, then <strong>Start new test</strong>. Create a disposable passkey in the password manager you want to test.</li>
+        <li>Approve that passkey again to prepare the test, then choose <strong>Copy test for other device</strong>.</li>
+        <li>Open this same address on the other device. Choose its device type, then <strong>Continue test from another device</strong>. Paste the copied test and choose <strong>Load test</strong>.</li>
+        <li>Choose <strong>Check Passkey Equality</strong> and use the same passkey through your chosen password manager or phone QR flow. The result shows whether the keys match and this device can unlock the test message.</li>
+      </ol>
+    </details>
     <p className="step"><strong>{STEP_LABELS[view.step]}</strong>{device ? ` · ${DEVICE_LABELS[device]}` : ''}</p>
     {testId ? <p className="test-id"><strong>Test ID: {testId}</strong> · Confirm this same ID appears on both devices.</p> : null}
 
