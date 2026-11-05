@@ -818,7 +818,7 @@ a { color: var(--link-color); text-decoration: none; }
 .header-links { display: flex; align-items: center; gap: var(--space-4); margin-left: auto; }
 .header-link { white-space: nowrap; font-weight: 600; }
 .header-link span { margin-left: var(--space-1); }
-.github-link { display: inline-flex; align-items: center; gap: var(--space-2); }
+.github-link { display: inline-flex; align-items: center; gap: var(--space-2); color: var(--faint); }
 .github-mark { flex: 0 0 auto; }
 .results-page { max-width: var(--results-measure); gap: var(--space-8); }
 .results-page header { padding-bottom: var(--space-6); border-bottom: 1px solid var(--line); }
