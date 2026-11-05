@@ -84,7 +84,7 @@ export function PrfSmokeTest({ rpId }: { readonly rpId: string }) {
     } catch (error) {
       const code = failureCode(error);
       setStatus({ busy: false, code, message: code === 'USER_NOT_VERIFIED'
-        ? 'The passkey response did not include user verification (USER_NOT_VERIFIED). No PRF or decryption result was accepted.'
+        ? 'Your browser did not report identity verification (USER_NOT_VERIFIED). The test stopped before accepting any encryption keys.'
         : `This step could not complete (${code}).` });
     }
   }
@@ -115,9 +115,12 @@ export function PrfSmokeTest({ rpId }: { readonly rpId: string }) {
     setStatus({ busy: false });
   }
 
-  return <Page title="Passkey Lab" lockup="none">
-    <p>This lab checks whether data encrypted with a passkey on one device can be unlocked with that same passkey on another.</p>
-    <p>A successful sign-in doesn’t guarantee matching encryption keys. Use a disposable passkey to find compatibility gaps between browsers, password managers and phone QR flows, and help vendors fix them.</p>
+  return <Page title="Passkey Lab" lockup="none" footer={<>
+    <p>Test website: <code>{rpId}</code>. Use this same address on both devices.</p>
+    <p>Use only passkeys created for testing. Copied reports include their encryption keys and passkey identifiers.</p>
+  </>}>
+    <p>We have discovered several scenarios where successfully unlocking a passkey doesn’t guarantee matching encryption keys, particularly across devices, browsers, and password managers.</p>
+    <p>This lab checks whether data encrypted with a passkey on one device can be unlocked with that same passkey on another. Use a disposable passkey to find compatibility gaps and help vendors fix them.</p>
     <details className="usage-guide" open={view.step === 'device'}>
       <summary>How to use</summary>
       <ol className="usage-steps">
@@ -125,6 +128,7 @@ export function PrfSmokeTest({ rpId }: { readonly rpId: string }) {
         <li>Approve that passkey again to prepare the test, then choose <strong>Copy test for other device</strong>.</li>
         <li>Open this same address on the other device. Choose its device type, then <strong>Continue test from another device</strong>. Paste the copied test and choose <strong>Load test</strong>.</li>
         <li>Choose <strong>Check Passkey Equality</strong> and use the same passkey through your chosen password manager or phone QR flow. The result shows whether the keys match and this device can unlock the test message.</li>
+        <li><strong>Optional:</strong> Test the reverse path. Start a new test on the other device, then check it on the first.</li>
       </ol>
     </details>
     <p className="step"><strong>{STEP_LABELS[view.step]}</strong>{device ? ` · ${DEVICE_LABELS[device]}` : ''}</p>
@@ -147,15 +151,15 @@ export function PrfSmokeTest({ rpId }: { readonly rpId: string }) {
     </> : null}
 
     {view.step === 'create' ? <>
-      <p>Save a new disposable passkey with the password manager you want to test. Use direct selection or a phone QR code, according to your test.</p>
+      <p>Save a new disposable passkey with the password manager you want to test. Select it directly, or use a phone QR code if that is the connection method you are testing.</p>
       <Controls><Button busy={status.busy} onClick={() => void approve()}>Create disposable passkey</Button></Controls>
     </> : null}
 
     {view.step === 'encrypt' ? <>
-      <p>The disposable passkey is ready. Approve it once more to encrypt the test message twice: once with the original-input output, and once with the extra-hashed-input output.</p>
-      <p>Use the same passkey and the same provider/path you used to create it.</p>
+      <p>The disposable passkey is ready. Approve it again to prepare the encrypted test for the other device.</p>
+      <p>Use the same passkey, password manager and connection method you used when creating it.</p>
       <Controls><Button busy={status.busy} onClick={() => void approve()}>Encrypt both cases and prepare test</Button></Controls>
-      <p>The default approval requests preferred verification. You can instead explicitly require verification using the same disposable passkey.</p>
+      <p>Start with the default approval. The alternative below asks the browser to require identity verification, using the same passkey.</p>
       <Controls><Button busy={status.busy} onClick={() => void approve('required')}>{status.code === 'USER_NOT_VERIFIED' ? 'Retry with required verification' : 'Encrypt with required verification'}</Button></Controls>
     </> : null}
 
@@ -164,7 +168,7 @@ export function PrfSmokeTest({ rpId }: { readonly rpId: string }) {
       <p>Choose that device, then <strong>Continue test from another device</strong>. Paste the test and choose <strong>Load test</strong>. You do not need to create another passkey.</p>
       <Field id={`${fieldId}-test`} label="Test for the other device" multiline rows={6} readOnly value={packetText} />
       <Controls><Button busy={status.busy} onClick={() => void copy(`${fieldId}-test`, packetText, 'Test copied. Continue on the other device using this same page.')}>Copy test for other device</Button></Controls>
-      <p>To compare verification policies on this device instead, check this same test here. This is separate from a phone QR comparison.</p>
+      <p>To compare the default and required verification settings on this device, choose <strong>Check on this device</strong>. This keeps the same passkey and test message.</p>
       <Controls><Button disabled={status.busy} onClick={() => {
         setView({ step: 'check', device: view.packet.sourceDevice, packet: view.packet });
         setStatus({ busy: false });
@@ -172,7 +176,7 @@ export function PrfSmokeTest({ rpId }: { readonly rpId: string }) {
     </> : null}
 
     {view.step === 'paste' ? <>
-      <p>Paste the test copied using <strong>Copy test for other device</strong>. Loading it checks the packet without asking for a passkey.</p>
+      <p>Paste the test copied using <strong>Copy test for other device</strong>. Loading it checks that the copied data is valid; it does not ask you to approve a passkey yet.</p>
       <Field id={`${fieldId}-input`} label="Test from the other device" multiline rows={6} value={view.text} disabled={status.busy} onChange={(text) => {
         setView({ step: 'paste', device: view.device, text });
         setStatus({ busy: false });
@@ -181,27 +185,27 @@ export function PrfSmokeTest({ rpId }: { readonly rpId: string }) {
     </> : null}
 
     {view.step === 'check' ? <>
-      <p>Test loaded from {DEVICE_LABELS[view.packet.sourceDevice]}. One approval checks both input choices against each encrypted message using the same disposable passkey.</p>
+      <p>Test loaded from {DEVICE_LABELS[view.packet.sourceDevice]}. Approve the same passkey to check whether this device can open the test message.</p>
       {!view.packet.hashedSample ? <p>This older packet contains only the original-input message. Start a new test to evaluate all four combinations.</p> : null}
-      <p>Choose the same passkey using the provider/path you are testing on this device. Direct selection and phone QR are both supported.</p>
+      <p>Select the same passkey through the password manager or phone QR flow you want to test on this device.</p>
       <Controls><Button busy={status.busy} onClick={() => void approve()}>Check Passkey Equality</Button></Controls>
-      <p>The default check requests preferred verification. The required-verification check uses the same passkey, encrypted test and Test ID.</p>
+      <p>Start with the default check. The second button asks the browser to require identity verification, using the same passkey and test message.</p>
       <Controls><Button busy={status.busy} onClick={() => void approve('required')}>{status.code === 'USER_NOT_VERIFIED' ? 'Retry with required verification' : 'Check with required verification'}</Button></Controls>
     </> : null}
 
     {view.step === 'result' ? <>
       <MessageBox role="status" title={view.report.samePrf ? 'Matching keys' : 'Different keys'}>
-        <p>{view.report.samePrf ? 'The fresh approval returned matching PRF keys.' : 'The fresh approval returned different PRF keys.'}</p>
+        <p>{view.report.samePrf ? 'The passkey returned matching encryption keys.' : 'The passkey returned different encryption keys.'}</p>
         <p>{view.report.checkingResult.opensTest ? 'This device opened the encrypted test from the other device.' : 'This device could not open the encrypted test from the other device.'}</p>
       </MessageBox>
-      <p>Each case below uses a fresh output from this device. “Extra-hashed” means our page hashes the input once before passing it to WebAuthn.</p>
-      <p>Requested verification: creator assertion <strong>{view.report.sourceUserVerification ?? 'not recorded'}</strong>; this check <strong>{view.report.checkingUserVerification}</strong>. Actual verification on this check: <strong>verified</strong>.</p>
+      <p>This device tried each key against both encrypted messages. “Original” and “extra-hashed” refer to the two test inputs.</p>
+      <p>Verification settings: first device <strong>{view.report.sourceUserVerification ?? 'not recorded'}</strong>; this device <strong>{view.report.checkingUserVerification}</strong>. This browser reported that identity verification succeeded.</p>
       <ul>{view.report.decryptionCases.map((entry) => <li key={`${entry.encryptedWith}-${entry.decryptedWith}`}>
         Source {entry.encryptedWith === 'original-input' ? 'original' : 'extra-hashed'} → this device {entry.decryptedWith === 'original-input' ? 'original' : 'extra-hashed'}: <strong>{entry.opensTest === null ? 'Unavailable' : entry.opensTest ? 'PASS' : 'FAIL'}</strong>
       </li>)}</ul>
-      <p>{DEVICE_LABELS[view.report.sourceDevice]} → {DEVICE_LABELS[view.report.checkingDevice]}. Copy the combined results below and paste them into our chat. No field extraction is needed.</p>
+      <p>{DEVICE_LABELS[view.report.sourceDevice]} → {DEVICE_LABELS[view.report.checkingDevice]}. Copy the report below to save this comparison. Before sharing it publicly, remove the encryption keys and passkey identifier.</p>
       <Field id={`${fieldId}-results`} label="Combined results" multiline rows={12} readOnly value={reportText} />
-      <Controls><Button busy={status.busy} onClick={() => void copy(`${fieldId}-results`, reportText, 'Results copied. Paste them into our chat.')}>Copy results for chat</Button></Controls>
+      <Controls><Button busy={status.busy} onClick={() => void copy(`${fieldId}-results`, reportText, 'Results copied.')}>Copy results</Button></Controls>
       <Controls><Button disabled={status.busy} onClick={() => {
         setView({ step: 'check', device: view.report.checkingDevice, packet: view.packet });
         setStatus({ busy: false });

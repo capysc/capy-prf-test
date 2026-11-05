@@ -17,34 +17,34 @@ type Comparison = Readonly<{
 const comparisons: readonly Comparison[] = [
   { number: 1, creator: ['iPhone Safari', '1Password'], consumer: ['Chrome · QR', 'iPhone · 1Password'],
     verification: ['Preferred', 'Preferred'], creatorKey: 'P(x)', consumerKey: 'P(D(x))', passes: false,
-    vendorAction: '1Password + Apple: audit PRF input handling at the QR/provider hand-off. Local and QR must evaluate the same input. Check Chrome’s boundary too; owner unconfirmed.' },
+    vendorAction: '1Password, Apple and Google should check why QR returns a different key from Safari for the same passkey and input. The responsible vendor is not yet known.' },
   { number: 2, creator: ['Chrome · QR', 'iPhone · 1Password'], consumer: ['iPhone Safari', '1Password'],
     verification: ['Preferred', 'Preferred'], creatorKey: 'P(D(x))', consumerKey: 'P(x)', passes: false,
-    vendorAction: 'Same QR/provider issue in reverse. Locate the relative extra input transform in 1Password, Apple’s bridge or Chrome before assigning ownership.' },
+    vendorAction: 'Investigate the same key mismatch when data is encrypted through QR and opened in Safari. Check where the two routes hash the input differently.' },
   { number: 3, creator: ['iPhone Safari', 'Apple Passwords'], consumer: ['Chrome · QR', 'iPhone · Apple Passwords'],
     verification: ['Preferred', 'Preferred'], creatorKey: 'P(x)', consumerKey: 'P(x)', passes: true,
-    vendorAction: 'Apple: no PRF fix indicated for this tested QR path.' },
+    vendorAction: 'Apple: no change needed for this tested QR route.' },
   { number: 4, creator: ['Chrome · QR', 'iPhone · Apple Passwords'], consumer: ['iPhone Safari', 'Apple Passwords'],
     verification: ['Preferred', 'Preferred'], creatorKey: 'P(x)', consumerKey: 'P(x)', passes: true,
-    vendorAction: 'Apple: no PRF fix indicated for the reverse QR path.' },
+    vendorAction: 'Apple: no change needed for this tested reverse QR route.' },
   { number: 5, creator: ['iPhone Safari', 'Apple Passwords'], consumer: ['Desktop Chrome · direct', 'Apple Passwords'],
     verification: ['Preferred', 'Preferred'], creatorKey: 'P(x)', consumerKey: 'P(x)', passes: true,
-    vendorAction: 'Apple: no PRF fix indicated for this direct path.' },
+    vendorAction: 'Apple: no change needed for this tested direct route.' },
   { number: 6, creator: ['Desktop Chrome · direct', 'Apple Passwords'], consumer: ['iPhone Safari', 'Apple Passwords'],
     verification: ['Preferred', 'Preferred'], creatorKey: 'P(x)', consumerKey: 'P(x)', passes: true,
-    vendorAction: 'Apple: no PRF fix indicated for the reverse direct path.' },
+    vendorAction: 'Apple: no change needed for this tested reverse direct route.' },
   { number: 7, creator: ['iPhone Chrome', 'Chrome Password Manager'], consumer: ['Desktop Chrome · direct', 'Chrome Password Manager'],
     verification: ['Preferred', 'Required'], creatorKey: 'P(x)', consumerKey: 'P(x)', passes: true,
-    vendorAction: 'Google: review desktop verification behavior. An earlier preferred attempt lacked actual UV; required passed on the Lab origin. No PRF hash bug is demonstrated here.' },
+    vendorAction: 'Google: investigate the earlier desktop approvals that did not report identity verification. This run worked with required verification and matching keys.' },
   { number: 8, creator: ['Desktop Chrome · direct', 'Chrome Password Manager'], consumer: ['iPhone Chrome', 'Chrome Password Manager'],
     verification: ['Required', 'Preferred'], creatorKey: 'P(x)', consumerKey: 'P(x)', passes: true,
-    vendorAction: 'Google: review desktop verification behavior. Creator’s preferred attempt lacked actual UV; required passed. Preferred permits no UV, so this alone is not a confirmed vendor bug.' },
+    vendorAction: 'Google: investigate why the default desktop approval did not report identity verification. The stricter request worked and the keys matched.' },
   { number: 9, creator: ['iPhone Safari', '1Password'], consumer: ['Desktop Chrome · direct', '1Password extension'],
     verification: ['Preferred', 'Preferred'], creatorKey: 'P(x)', consumerKey: 'P(x)', passes: true,
-    vendorAction: '1Password: no PRF fix indicated for the direct extension path; the observed mismatch is on the earlier QR path.' },
+    vendorAction: '1Password: this direct extension route worked without changes. The key mismatch appeared in the earlier QR tests.' },
   { number: 10, creator: ['Desktop Chrome · direct', '1Password extension'], consumer: ['iPhone Safari', '1Password'],
     verification: ['Required', 'Preferred'], creatorKey: 'P(x)', consumerKey: 'P(x)', passes: true,
-    vendorAction: '1Password: establish preferred-verification compatibility for this creator flow. This run used required and does not prove preferred fails; no PRF mismatch was observed.' },
+    vendorAction: '1Password: check whether this also works with the default verification setting. This run used the stricter setting; it does not prove the default would fail.' },
 ];
 
 function Verdict({ passes }: Readonly<{ passes: boolean }>) {
@@ -71,6 +71,17 @@ export function ResultsPage() {
   return <Page title="Passkey Lab" results>
     <section className="results-section" aria-labelledby="comparison-heading">
       <div className="section-heading"><h2 id="comparison-heading">The full comparison</h2></div>
+      <p className="section-description">Each row shows a test between two devices: the Creator encrypts a message, and the Consumer tries to open it. The table records their browsers, password managers, keys and result.</p>
+      <div className="results-note">
+        <p><strong>Reading the keys</strong></p>
+        <dl className="key-legend">
+          <dt><code>x</code></dt><dd>The original input given to the passkey.</dd>
+          <dt><code>D(x)</code></dt><dd>A hashed version of that input, used for comparison.</dd>
+          <dt><code>P(x)</code></dt><dd>The encryption key the phone returns for the original input.</dd>
+          <dt><code>P(D(x))</code></dt><dd>The different key the phone returns when given the hashed input.</dd>
+        </dl>
+        <p><strong>In simpler terms:</strong> In the <code>P(D(x))</code> case, the tested 1Password QR flow behaves as though the input is hashed one extra time compared with local Safari. This produces a different encryption key, preventing data encrypted through one path from opening through the other.</p>
+      </div>
       <p className="section-description">“Pass” means decryption worked out of the box. “Needs changes” means decryption worked after additional configuration.</p>
       <div className="table-scroll" role="region" aria-labelledby="comparison-heading" tabIndex={0}>
         <table className="comparison-table">
@@ -85,28 +96,18 @@ export function ResultsPage() {
           </tr>)}</tbody>
         </table>
       </div>
-      <div className="results-note">
-        <p><strong>Reading the keys</strong></p>
-        <dl className="key-legend">
-          <dt><code>x</code></dt><dd>The original input given to the passkey.</dd>
-          <dt><code>D(x)</code></dt><dd>A hashed version of that input, used for comparison.</dd>
-          <dt><code>P(x)</code></dt><dd>The encryption key the phone returns for the original input.</dd>
-          <dt><code>P(D(x))</code></dt><dd>The different key the phone returns when given the hashed input.</dd>
-        </dl>
-        <p><strong>In simpler terms:</strong> In the <code>P(D(x))</code> case, the tested 1Password QR flow behaves as though the input is hashed one extra time compared with local Safari. This produces a different encryption key, preventing data encrypted through one path from opening through the other.</p>
-      </div>
-      <p className="results-note"><strong>Vendor ownership is unconfirmed.</strong> The QR and direct runs used different origins and credentials. The investigation should check the raw-versus-already-hashed hand-off: <a href="https://github.com/1Password/passkey-rs/blob/1606717bd9888b629905d435bb876b24b1aaddb5/passkey-types/src/webauthn/extensions/mod.rs#L36">1Password’s Apple input contract</a> and <a href="https://chromium.googlesource.com/chromium/src/+/main/ios/chrome/credential_provider_extension/passkey_util.mm#37">Chromium’s iOS adapter</a> identify relevant public boundaries, not proof of the installed bug’s owner.</p>
+      <p className="results-note"><strong>Who needs to fix this?</strong> It is not yet clear whether the fault is in 1Password, Apple’s passkey support or Chrome. The QR and direct-extension tests used different websites and passkeys. <a href="https://github.com/1Password/passkey-rs/blob/1606717bd9888b629905d435bb876b24b1aaddb5/passkey-types/src/webauthn/extensions/mod.rs#L36">1Password’s handling of Apple’s inputs</a> and <a href="https://chromium.googlesource.com/chromium/src/+/main/ios/chrome/credential_provider_extension/passkey_util.mm#37">Chrome’s iOS code</a> are places to investigate; they do not prove which vendor caused the mismatch.</p>
     </section>
 
     <section className="results-section contribution-section" aria-labelledby="contribution-heading">
       <div className="section-heading"><h2 id="contribution-heading">Contributing</h2></div>
       <p>Help broaden the evidence with another browser, password manager or access path.</p>
       <ul>
-        <li>Include the date, origin, device and software versions, creator/consumer paths and native provider-selection route.</li>
-        <li>Record requested verification and actual UV on both devices, plus all four decryption verdicts. Report native popups and app errors separately when no comparison completed.</li>
-        <li>Share a sanitized summary. Copied packets and reports contain disposable PRF outputs and credential IDs; leave those out of public submissions.</li>
+        <li>Include the date, test website, device and software versions. Describe how the passkey was selected on each device: directly, through an extension or by scanning a QR code.</li>
+        <li>Record the verification setting and whether each device reported identity verification. Include whether each of the four decryption checks worked, or the exact error if the test stopped.</li>
+        <li>Share a summary without keys or passkey identifiers. Copied test data and reports contain these values; remove them before posting publicly.</li>
       </ul>
-      <p><a href="https://github.com/capysc/capy-prf-test/issues/new" target="_blank" rel="noopener">Share a result on GitHub</a> or read the <a href="https://github.com/capysc/capy-prf-test#contributing" target="_blank" rel="noopener">contribution guide</a>. Keep observations and suspected causes distinct.</p>
+      <p><a href="https://github.com/capysc/capy-prf-test/issues/new" target="_blank" rel="noopener">Share a result on GitHub</a> or read the <a href="https://github.com/capysc/capy-prf-test#contributing" target="_blank" rel="noopener">contribution guide</a>. Explain what happened and label any guesses about why.</p>
     </section>
 
   </Page>;

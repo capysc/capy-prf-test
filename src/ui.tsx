@@ -1,7 +1,7 @@
 import type { ComponentProps, ReactNode } from 'react';
 
-export function Page({ title, children, results = false }: Readonly<{ title: string; lockup?: string; children: ReactNode; results?: boolean }>) {
-  return <main className={results ? 'results-page' : undefined}>
+export function Page({ title, children, results = false, footer }: Readonly<{ title: string; lockup?: string; children: ReactNode; results?: boolean; footer?: ReactNode }>) {
+  return <><main className={results ? 'results-page' : undefined}>
     <header>
       <svg className="capy-mark" width="36" height="36" viewBox="0 0 64 64" role="img" aria-label="Capy" xmlns="http://www.w3.org/2000/svg"><rect width="64" height="64" fill="black" /><path d="M34.5 18.25V33.7061L45.4277 44.8496L42.5723 47.6504L32.5 37.3789L22.4277 47.6504L19.5723 44.8496L30.5 33.7061V18.25H34.5Z" fill="white" /></svg>
       <h1>{title}</h1>
@@ -14,7 +14,16 @@ export function Page({ title, children, results = false }: Readonly<{ title: str
       </nav>
     </header>
     {children}
-  </main>;
+  </main>
+    <footer className={results ? 'results-footer' : undefined}>
+      {footer}
+      <nav className="footer-links" aria-label="Capy links">
+        <a href="https://capy.sc" target="_blank" rel="noopener">capy.sc</a>
+        <a href="https://x.com/capythoughts" target="_blank" rel="noopener">Twitter</a>
+        <a href="https://www.linkedin.com/company/capysec" target="_blank" rel="noopener">LinkedIn</a>
+      </nav>
+    </footer>
+  </>;
 }
 
 export function Controls({ children }: Readonly<{ children: ReactNode }>) {
