@@ -1,5 +1,5 @@
 {
-  "stableUrl": "https://capy-prf-test.vercel.app/",
+  "stableUrl": "https://passkey-lab.capy.sc/",
   "deploymentId": "dpl_4zd3iXNvNvyvE6xUDzuGZJWaLyqx",
   "readyState": "READY",
   "sourceRevision": "27b226853aebe823cd4f77937543d3b392961cdb",
@@ -42,5 +42,26 @@
     "uiBrowserTests": "not run per user instruction",
     "manualAcceptance": "pending"
   },
-  "recordKind": "verified application source snapshot; later metadata-only commits do not alter application assets"
+  "recordKind": "verified application source snapshot; later metadata-only commits do not alter application assets",
+  "domainVerifiedAt": "2026-11-05T04:08:29.159836+00:00",
+  "domainChecks": [
+    {
+      "path": "/",
+      "status": 200,
+      "matchesLocal": true,
+      "sha256": "4bab7d19df1003e2a8b498995a3c43b98234eb71cc1b04dc540cb5ed2dfbaae2"
+    },
+    {
+      "path": "/app.js",
+      "status": 200,
+      "matchesLocal": true,
+      "sha256": "bdac8bba893acf197e76c1dc01e169916e74b33d5a553ac91d1454d811d73e5e"
+    },
+    {
+      "path": "/style.css",
+      "status": 200,
+      "matchesLocal": true,
+      "sha256": "bb6b2f5effe2f0f08e6426f16e930f2054ff6247e130b1fe01825f2501fcbfcb"
+    }
+  ]
 }

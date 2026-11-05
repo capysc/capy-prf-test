@@ -1,6 +1,6 @@
 # Passkey Lab deployment
 
-- Stable test URL: https://capy-prf-test.vercel.app/
+- Stable test URL: https://passkey-lab.capy.sc/
 - Vercel project: `capy-prf-test`, independent of Keep.
 - Branch: `codex/standalone-prf-test`.
 - Deployed application source: `27b226853aebe823cd4f77937543d3b392961cdb`.
@@ -29,7 +29,7 @@ Enrollment requires verification. The later source assertion and default consume
 
 ## Domain and previous evidence
 
-Use the stable URL on both devices. The RP ID is `capy-prf-test.vercel.app`, so create a new disposable passkey here. Existing `staging-keep.capy.sc` credentials and packets belong to a different RP and are deliberately not reused. Existing staging test results remain valid evidence for their original RP; record new results with this app's RP and Test ID.
+Use the stable URL on both devices. The RP ID is `passkey-lab.capy.sc`, so create a new disposable passkey here. Existing `staging-keep.capy.sc` or `capy-prf-test.vercel.app` credentials and packets belong to a different RP and are deliberately not reused. Existing staging test results remain valid evidence for their original RP; record new results with this app's RP and Test ID.
 
 ## Reproduce / deploy
 
