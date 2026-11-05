@@ -3,8 +3,8 @@
 - Stable test URL: https://capy-prf-test.vercel.app/
 - Vercel project: `capy-prf-test`, independent of Keep.
 - Branch: `codex/standalone-prf-test`.
-- Deployed application source: `6f94f25f59e6c9b528509c5bb7322d0dca7f29c0`.
-- Deployment: `dpl_eFpi6uBateNw5BoACWuskegq6dLc`, `READY`.
+- Deployed application source: `27b226853aebe823cd4f77937543d3b392961cdb`.
+- Deployment: `dpl_4zd3iXNvNvyvE6xUDzuGZJWaLyqx`, `READY`.
 - This test project's production target provides its public stable address. No Capy product deployment, existing alias, or DNS was changed.
 - Full verified application snapshot and asset SHA-256 values: `deployment.json`.
 - Private source: `https://github.com/capysc/capy-prf-test`.
@@ -19,7 +19,7 @@ The stylesheet was verified at the public URL and matches the built Keep kit sty
 
 ## Keep visual provenance
 
-The user selected Keep styling. The standalone app reuses `capysc/keep-app` at `f6765478b424c2aaffb28d6c11d0358849604310`, inspected read-only at `/private/tmp/capy-staging-desktop-transport-20261103`. References are `src/lib/ui/canonical/kit-tokens.css`, `kit-base.css`, and the native `Page`, `Button`, `Controls`, `Field`, and `MessageBox` kit components. Keep uses a system font stack, so no bundled or remote font is needed. The prior blog look and font assets have been removed. Test behavior and crypto source remain unchanged.
+The user selected Keep styling. The standalone app reuses `capysc/keep-app` at `f6765478b424c2aaffb28d6c11d0358849604310`, inspected read-only at `/private/tmp/capy-staging-desktop-transport-20261103`. References are `src/lib/ui/canonical/kit-tokens.css`, `kit-base.css`, and the native `Page`, `Button`, `Controls`, `Field`, `MessageBox`, `SquareLogo`, and `Mark` kit components. The visible heading and document title are **Passkey Lab**, with the actual Capy square logo at the top left. Keep uses a system font stack, so no bundled or remote font is needed. The prior blog look and font assets have been removed. Test behavior and crypto source remain unchanged.
 
 The application correction is deployed and verified. The previous blog-styled deployment was `dpl_2dQfVJArHTmLM1i9xGLsrvcrL5gm` at `c8dc7a635bef662cef43a25d4ed0b8b72d59d62c`; it is superseded.
 

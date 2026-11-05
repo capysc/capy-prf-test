@@ -1,37 +1,37 @@
 {
   "stableUrl": "https://capy-prf-test.vercel.app/",
-  "deploymentId": "dpl_eFpi6uBateNw5BoACWuskegq6dLc",
+  "deploymentId": "dpl_4zd3iXNvNvyvE6xUDzuGZJWaLyqx",
   "readyState": "READY",
-  "sourceRevision": "6f94f25f59e6c9b528509c5bb7322d0dca7f29c0",
+  "sourceRevision": "27b226853aebe823cd4f77937543d3b392961cdb",
   "branch": "codex/standalone-prf-test",
   "repository": "https://github.com/capysc/capy-prf-test",
   "gitTriggered": true,
   "keepSource": "capysc/keep-app",
   "keepRevision": "f6765478b424c2aaffb28d6c11d0358849604310",
-  "verifiedAt": "2026-11-05T04:04:52.497514+00:00",
+  "verifiedAt": "2026-11-05T04:06:40.528366+00:00",
   "assets": [
     {
       "path": "/",
       "status": 200,
-      "sha256": "5a4ae4632005b78019f04afdb5d3760afff980259163d741a02ff253da519f58",
+      "sha256": "4bab7d19df1003e2a8b498995a3c43b98234eb71cc1b04dc540cb5ed2dfbaae2",
       "contentType": "text/html; charset=utf-8"
     },
     {
       "path": "/app.js",
       "status": 200,
-      "sha256": "a067bc8ed8ba9ce7f19bd95d4e105577d4845220ce753545a690b5a03baa9707",
+      "sha256": "bdac8bba893acf197e76c1dc01e169916e74b33d5a553ac91d1454d811d73e5e",
       "contentType": "application/javascript; charset=utf-8"
     },
     {
       "path": "/style.css",
       "status": 200,
-      "sha256": "a89d6e55409a174ac4f55620310d43cd40300e79e515fedeaab8bea1afb71016",
+      "sha256": "bb6b2f5effe2f0f08e6426f16e930f2054ff6247e130b1fe01825f2501fcbfcb",
       "contentType": "text/css; charset=utf-8"
     },
     {
       "path": "/prf-test",
       "status": 200,
-      "sha256": "5a4ae4632005b78019f04afdb5d3760afff980259163d741a02ff253da519f58",
+      "sha256": "4bab7d19df1003e2a8b498995a3c43b98234eb71cc1b04dc540cb5ed2dfbaae2",
       "contentType": "text/html; charset=utf-8"
     }
   ],
