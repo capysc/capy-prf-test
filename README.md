@@ -20,6 +20,8 @@ Choose the current device role. The labels do not choose a browser, provider, or
 
 Each assertion requests exactly the same original input and domain-separated hashed input as the Keep diagnostic. Both outputs are normalized to exact 32-byte snapshots, with actual user verification required. Each ciphertext has its own IV. The consumer uses fresh native outputs for all four AES-GCM decryptions, never the copied source keys. No automatic extra-hash compensation or provider detection is applied.
 
+The default source and consumer assertions request `userVerification: preferred` and still reject a response without the actual UV bit. Enrollment separately requests `required`; this does not describe subsequent assertions. If the consumer receives `USER_NOT_VERIFIED`, a separate **Retry with required verification** button preserves the packet and Test ID and directly starts one `get` request with `required`. This is an explicit additional experiment, never an automatic retry or changed default. Successful reports include creator/consumer requested policies and actual verification results; an unverified response produces no PRF or decryption report.
+
 The reports intentionally include disposable PRF outputs for this experiment. Do not use real account or Transport passkeys. No passkey ceremonies are automated by the code's tests.
 
 UI/browser tests are intentionally not used. Existing focused crypto tests are retained; typecheck and static build validate packaging. Manual device acceptance is separate.

@@ -9,7 +9,9 @@ const b64 = (value: Uint8Array): string => btoa(Array.from(value, (byte) => Stri
 const decode = (value: string): Uint8Array<ArrayBuffer> => Uint8Array.from(atob(value.replace(/-/g, '+').replace(/_/g, '/')), (character) => character.charCodeAt(0));
 const hex = (value: Uint8Array): string => Array.from(value, (byte) => byte.toString(16).padStart(2, '0')).join('');
 export type PrfTestDevice = 'phone' | 'desktop';
+export type PrfVerificationPolicy = 'preferred' | 'required';
 export type PrfTestResult = Readonly<{
+  userVerified?: true;
   prfHex: string;
   hashedInputPrfHex: string | null;
   opensTest: boolean;
@@ -20,6 +22,7 @@ export type PrfUnifiedTest = Readonly<{
   testId?: string;
   rpId: string;
   sourceDevice: PrfTestDevice;
+  sourceUserVerification?: 'preferred';
   sample: string;
   hashedSample?: string;
   sourceResult: PrfTestResult;
@@ -36,6 +39,10 @@ export type PrfUnifiedReport = Readonly<{
   credentialId: string;
   sourceDevice: PrfTestDevice;
   checkingDevice: PrfTestDevice;
+  sourceUserVerification: 'preferred' | null;
+  checkingUserVerification: PrfVerificationPolicy;
+  sourceUserVerified: true | null;
+  checkingUserVerified: true;
   sourceResult: PrfTestResult;
   checkingResult: PrfTestResult;
   samePrf: boolean;
@@ -70,11 +77,11 @@ function outputBytes(raw: unknown): Uint8Array<ArrayBuffer> | null {
   return null;
 }
 
-async function evaluate(rpId: string, credentialId: string, api: NativeCredentials) {
+async function evaluate(rpId: string, credentialId: string, api: NativeCredentials, userVerification: PrfVerificationPolicy = 'preferred') {
   const credential = await api.get({ publicKey: {
     rpId, challenge: crypto.getRandomValues(new Uint8Array(32)),
     allowCredentials: [{ type: 'public-key', id: decode(credentialId) }],
-    userVerification: 'preferred', extensions: { prf: { eval: { first: SALT, second: HASHED_SALT } } },
+    userVerification, extensions: { prf: { eval: { first: SALT, second: HASHED_SALT } } },
   } }) as PublicKeyCredential | null;
   if (!credential || credential.id !== credentialId) throw new Error('CREDENTIAL_MISMATCH');
   const data = new Uint8Array((credential.response as AuthenticatorAssertionResponse).authenticatorData);
@@ -118,7 +125,7 @@ async function resultFor(sample: Sample, key: CryptoKey, output: Uint8Array<Arra
     opensMessage(sample, key),
     secondKey ? opensMessage(sample, secondKey) : Promise.resolve(null),
   ]);
-  return { prfHex: hex(output), hashedInputPrfHex: second ? hex(second) : null, opensTest, hashedInputOpensTest };
+  return { userVerified: true, prfHex: hex(output), hashedInputPrfHex: second ? hex(second) : null, opensTest, hashedInputOpensTest };
 }
 
 export async function createUnifiedPrfTest(rpId: string, credentialId: string, device: PrfTestDevice, api: NativeCredentials = navigator.credentials): Promise<PrfUnifiedTest> {
@@ -131,7 +138,7 @@ export async function createUnifiedPrfTest(rpId: string, credentialId: string, d
   ]);
   const sourceResult = await resultFor(sample, key, output, second);
   if (!sourceResult.opensTest || (hashedSample && secondKey && !await opensMessage(hashedSample, secondKey))) throw new Error('LOCAL_ENCRYPTION_FAILED');
-  return { v: 2, testId: `PRF-${crypto.randomUUID().slice(0, 8).toUpperCase()}`, rpId, sourceDevice: device, sample: JSON.stringify(sample), sourceResult,
+  return { v: 2, testId: `PRF-${crypto.randomUUID().slice(0, 8).toUpperCase()}`, rpId, sourceDevice: device, sourceUserVerification: 'preferred', sample: JSON.stringify(sample), sourceResult,
     ...(hashedSample ? { hashedSample: JSON.stringify(hashedSample) } : {}) };
 }
 
@@ -140,6 +147,7 @@ function validResult(value: unknown): value is PrfTestResult {
   if (!value || typeof value !== 'object') return false;
   const result = value as Partial<PrfTestResult>;
   return validHex(result.prfHex) && (result.hashedInputPrfHex === null || validHex(result.hashedInputPrfHex))
+    && (result.userVerified === undefined || result.userVerified === true)
     && typeof result.opensTest === 'boolean' && (result.hashedInputOpensTest === null || typeof result.hashedInputOpensTest === 'boolean');
 }
 
@@ -148,7 +156,8 @@ export function parseUnifiedPrfTest(rpId: string, text: string): PrfUnifiedTest 
   const packet: Partial<PrfUnifiedTest> | null = JSON.parse(text);
   if (packet?.v !== 2 || typeof packet.rpId !== 'string' || (packet.sourceDevice !== 'phone' && packet.sourceDevice !== 'desktop')
     || typeof packet.sample !== 'string' || !validResult(packet.sourceResult)
-    || (packet.testId !== undefined && (typeof packet.testId !== 'string' || !/^PRF-[0-9A-F]{8}$/.test(packet.testId)))) throw new Error('INVALID_TEST');
+    || (packet.testId !== undefined && (typeof packet.testId !== 'string' || !/^PRF-[0-9A-F]{8}$/.test(packet.testId)))
+    || (packet.sourceUserVerification !== undefined && packet.sourceUserVerification !== 'preferred')) throw new Error('INVALID_TEST');
   if (packet.rpId !== rpId) throw new Error('TEST_DOMAIN_MISMATCH');
   const sample = readSample(packet.sample);
   if (packet.hashedSample !== undefined) {
@@ -156,13 +165,14 @@ export function parseUnifiedPrfTest(rpId: string, text: string): PrfUnifiedTest 
   }
   return { v: 2, rpId, sourceDevice: packet.sourceDevice, sample: packet.sample, sourceResult: { ...packet.sourceResult },
     ...(packet.testId !== undefined ? { testId: packet.testId } : {}),
+    ...(packet.sourceUserVerification !== undefined ? { sourceUserVerification: packet.sourceUserVerification } : {}),
     ...(packet.hashedSample !== undefined ? { hashedSample: packet.hashedSample } : {}) };
 }
 
-export async function checkUnifiedPrfTest(rpId: string, packet: PrfUnifiedTest, device: PrfTestDevice, api: NativeCredentials = navigator.credentials): Promise<PrfUnifiedReport> {
+export async function checkUnifiedPrfTest(rpId: string, packet: PrfUnifiedTest, device: PrfTestDevice, api: NativeCredentials = navigator.credentials, checkingUserVerification: PrfVerificationPolicy = 'preferred'): Promise<PrfUnifiedReport> {
   const checkedPacket = parseUnifiedPrfTest(rpId, JSON.stringify(packet));
   const sample = readSample(checkedPacket.sample);
-  const { key, output, second } = await evaluate(rpId, sample.credentialId, api);
+  const { key, output, second } = await evaluate(rpId, sample.credentialId, api, checkingUserVerification);
   const checkingResult = await resultFor(sample, key, output, second);
   const sourceResult = checkedPacket.sourceResult;
   const secondKey = second ? await crypto.subtle.importKey('raw', second, 'AES-GCM', false, ['decrypt']) : null;
@@ -179,7 +189,10 @@ export async function checkUnifiedPrfTest(rpId: string, packet: PrfUnifiedTest, 
   ];
   return {
     test: 'unified-prf-v1', testId: checkedPacket.testId ?? null, rpId, credentialId: sample.credentialId,
-    sourceDevice: checkedPacket.sourceDevice, checkingDevice: device, sourceResult, checkingResult, decryptionCases,
+    sourceDevice: checkedPacket.sourceDevice, checkingDevice: device,
+    sourceUserVerification: checkedPacket.sourceUserVerification ?? null, checkingUserVerification,
+    sourceUserVerified: checkedPacket.sourceResult.userVerified ?? null, checkingUserVerified: true,
+    sourceResult, checkingResult, decryptionCases,
     samePrf: sourceResult.prfHex === checkingResult.prfHex,
     sameHashedInputPrf: sourceResult.hashedInputPrfHex !== null && checkingResult.hashedInputPrfHex !== null
       ? sourceResult.hashedInputPrfHex === checkingResult.hashedInputPrfHex : null,

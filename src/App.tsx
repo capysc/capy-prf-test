@@ -8,6 +8,7 @@ import {
   type PrfTestDevice,
   type PrfUnifiedTest,
   type PrfUnifiedReport,
+  type PrfVerificationPolicy,
 } from './prf';
 
 type View =
@@ -58,7 +59,7 @@ const failureCode = (error: unknown): string => error instanceof SyntaxError ? '
 export function PrfSmokeTest({ rpId }: { readonly rpId: string }) {
   const fieldId = useId();
   const [view, setView] = useState<View>({ step: 'device' });
-  const [status, setStatus] = useState<Readonly<{ busy: boolean; message?: string }>>({ busy: false });
+  const [status, setStatus] = useState<Readonly<{ busy: boolean; message?: string; code?: string }>>({ busy: false });
   const packetText = view.step === 'transfer' ? JSON.stringify(view.packet, null, 2) : '';
   const reportText = view.step === 'result' ? JSON.stringify(view.report, null, 2) : '';
   const device = view.step === 'device' ? null : view.step === 'transfer' ? view.packet.sourceDevice
@@ -66,7 +67,7 @@ export function PrfSmokeTest({ rpId }: { readonly rpId: string }) {
   const testId = view.step === 'transfer' || view.step === 'check' ? view.packet.testId
     : view.step === 'result' ? view.report.testId : null;
 
-  async function approve(): Promise<void> {
+  async function approve(checkingUserVerification: PrfVerificationPolicy = 'preferred'): Promise<void> {
     if (status.busy || (view.step !== 'create' && view.step !== 'encrypt' && view.step !== 'check')) return;
     setStatus({ busy: true });
     try {
@@ -76,11 +77,14 @@ export function PrfSmokeTest({ rpId }: { readonly rpId: string }) {
         ? { step: 'encrypt', device: view.device, credentialId: await createSmokeCredential(rpId) }
         : view.step === 'encrypt'
           ? { step: 'transfer', packet: await createUnifiedPrfTest(rpId, view.credentialId, view.device) }
-          : { step: 'result', report: await checkUnifiedPrfTest(rpId, view.packet, view.device) };
+          : { step: 'result', report: await checkUnifiedPrfTest(rpId, view.packet, view.device, navigator.credentials, checkingUserVerification) };
       setView(next);
       setStatus({ busy: false });
     } catch (error) {
-      setStatus({ busy: false, message: `This step could not complete (${failureCode(error)}).` });
+      const code = failureCode(error);
+      setStatus({ busy: false, code, message: code === 'USER_NOT_VERIFIED'
+        ? 'The passkey response did not include user verification (USER_NOT_VERIFIED). No PRF or decryption result was accepted.'
+        : `This step could not complete (${code}).` });
     }
   }
 
@@ -164,6 +168,10 @@ export function PrfSmokeTest({ rpId }: { readonly rpId: string }) {
       {!view.packet.hashedSample ? <p>This older packet contains only the original-input message. Start a new test to evaluate all four combinations.</p> : null}
       <p>Choose the same passkey using the provider/path you are testing on this device. Direct selection and phone QR are both supported.</p>
       <Controls><Button busy={status.busy} onClick={() => void approve()}>Check Passkey Equality</Button></Controls>
+      {status.code === 'USER_NOT_VERIFIED' ? <>
+        <p>Separate experiment: retry this same test with user verification explicitly required. Your packet and Test ID stay unchanged. The original check requests preferred verification.</p>
+        <Controls><Button busy={status.busy} onClick={() => void approve('required')}>Retry with required verification</Button></Controls>
+      </> : null}
     </> : null}
 
     {view.step === 'result' ? <>
@@ -172,6 +180,7 @@ export function PrfSmokeTest({ rpId }: { readonly rpId: string }) {
         <p>{view.report.checkingResult.opensTest ? 'This device opened the encrypted test from the other device.' : 'This device could not open the encrypted test from the other device.'}</p>
       </MessageBox>
       <p>Each case below uses a fresh output from this device. “Extra-hashed” means our page hashes the input once before passing it to WebAuthn.</p>
+      <p>Requested verification: creator assertion <strong>{view.report.sourceUserVerification ?? 'not recorded'}</strong>; this check <strong>{view.report.checkingUserVerification}</strong>. Actual verification on this check: <strong>verified</strong>.</p>
       <ul>{view.report.decryptionCases.map((entry) => <li key={`${entry.encryptedWith}-${entry.decryptedWith}`}>
         Source {entry.encryptedWith === 'original-input' ? 'original' : 'extra-hashed'} → this device {entry.decryptedWith === 'original-input' ? 'original' : 'extra-hashed'}: <strong>{entry.opensTest === null ? 'Unavailable' : entry.opensTest ? 'PASS' : 'FAIL'}</strong>
       </li>)}</ul>

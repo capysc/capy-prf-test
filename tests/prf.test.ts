@@ -37,6 +37,7 @@ test('one portable test enrolls, encrypts, and checks freshly on another device 
     sourceResult: { opensTest: true }, checkingResult: { opensTest: true, hashedInputOpensTest: false } });
   expect(report.decryptionCases.map((entry) => entry.opensTest)).toEqual([true, false, false, true]);
   expect(report.testId).toBe(packet.testId ?? null);
+  expect(report).toMatchObject({ sourceUserVerification: 'preferred', checkingUserVerification: 'preferred', sourceUserVerified: true, checkingUserVerified: true });
 });
 
 test('reverse setup and a mismatched native key report actual decryption and hash crossovers, never decrypting with copied source bytes', async () => {
@@ -67,5 +68,16 @@ test('invalid domain, copied packet, credential, UV and PRF output are refused',
   await expect(checkUnifiedPrfTest(rp, packet, 'desktop', wrong)).rejects.toThrow('CREDENTIAL_MISMATCH');
   const noUv = { ...driver(), get: async () => ({ ...credential(first), response: { authenticatorData: new Uint8Array(37).buffer } }) as unknown as Credential };
   await expect(checkUnifiedPrfTest(rp, packet, 'desktop', noUv)).rejects.toThrow('USER_NOT_VERIFIED');
+  await expect(checkUnifiedPrfTest(rp, packet, 'desktop', noUv, 'required')).rejects.toThrow('USER_NOT_VERIFIED');
   await expect(checkUnifiedPrfTest(rp, packet, 'desktop', driver(new Uint8Array(31)))).rejects.toThrow('PRF_NOT_32_BYTES');
+});
+
+test('a separate required-verification check preserves the packet and records its requested policy', async () => {
+  const packet = await createUnifiedPrfTest(rp, id, 'phone', driver(first, second));
+  const target = driver(first, second);
+  const pending = checkUnifiedPrfTest(rp, packet, 'desktop', target, 'required');
+  expect(target.get).toHaveBeenCalledTimes(1);
+  expect(target.get.mock.calls[0][0]?.publicKey?.userVerification).toBe('required');
+  const report = await pending;
+  expect(report).toMatchObject({ testId: packet.testId, sourceUserVerification: 'preferred', checkingUserVerification: 'required', sourceUserVerified: true, checkingUserVerified: true, checkingResult: { opensTest: true } });
 });
