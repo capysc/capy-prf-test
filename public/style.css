@@ -857,6 +857,7 @@ a { color: var(--link-color); text-decoration: none; }
 .verdict-changes { color: var(--warn-ink); background: var(--warn-bg); }
 .results-note { color: var(--ink); font-size: var(--results-text); max-width: var(--measure-wide); }
 .results-note p + p { margin-top: var(--space-3); }
+.results-page .results-note a, .results-page .contribution-section a { color: var(--ink); }
 .key-legend { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: var(--space-2) var(--space-4); margin: var(--space-3) 0; }
 .key-legend dt, .key-legend dd { margin: 0; }
 .section-divider { width: 100%; margin: 0; border: 0; border-top: 1px solid var(--line-strong); }
