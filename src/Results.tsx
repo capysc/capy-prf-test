@@ -91,7 +91,7 @@ export function ResultsPage() {
           <dt><code>x</code></dt><dd>The original input supplied to the passkey.</dd>
           <dt><code>D(x)</code></dt><dd>The extra-hashed input: <code>SHA-256(UTF8("WebAuthn PRF") || 0x00 || x)</code>.</dd>
           <dt><code>P(x)</code></dt><dd>The phone-local PRF output for this passkey using the original input.</dd>
-          <dt><code>P(D(x))</code></dt><dd>Hash the input first, then evaluate the phone-local PRF. This is the phone’s output when given the extra-hashed input.</dd>
+          <dt><code>P(D(x))</code></dt><dd>The phone-local PRF output when given the extra-hashed input. <strong>In simpler terms:</strong> instead of giving the phone’s passkey the original input, we hash that input first and ask it for a key using the hashed version. Think of this as an extra preparation step before key generation—not wrapping or encrypting the data twice.</dd>
         </dl>
         <p>In Tests 1–2, QR’s original-input key matched the phone’s <code>P(D(x))</code> key. The notation describes that observed relationship; each test uses its own credential.</p>
       </div>
