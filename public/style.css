@@ -820,18 +820,6 @@ a:hover { text-decoration-thickness: 2px; }
 .header-link span { margin-left: var(--space-1); }
 .results-page { max-width: var(--results-measure); gap: var(--space-8); }
 .results-page header { padding-bottom: var(--space-6); border-bottom: 1px solid var(--line); }
-.results-intro { display: grid; gap: var(--space-4); max-width: var(--measure-wide); }
-.results-eyebrow { color: var(--faint); font-size: var(--results-text); font-weight: 600; letter-spacing: 0.08em; }
-.results-title { font-size: clamp(1.75rem, 4vw, var(--text-5xl)); line-height: var(--leading-tight); letter-spacing: -0.035em; }
-.results-lede { color: var(--faint); font-size: var(--text-lg); max-width: var(--measure); }
-.results-date { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2); font-size: var(--results-text); }
-.results-date time { font-weight: 600; }
-.date-zone { color: var(--faint); }
-.results-highlights { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
-.result-highlight { display: grid; align-content: start; gap: var(--space-2); padding: var(--space-5); border: 1px solid var(--line); border-radius: var(--radius); background: var(--foreground); }
-.highlight-label { font-size: var(--results-text); color: var(--faint); }
-.result-highlight strong { font-weight: 600; font-size: var(--text-lg); }
-.result-highlight p { font-size: var(--results-text); color: var(--faint); }
 .results-section { display: grid; gap: var(--space-4); min-width: 0; }
 .section-heading { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: var(--space-2); }
 .section-heading h2 { font-size: var(--text-xl); }
@@ -873,7 +861,7 @@ a:hover { text-decoration-thickness: 2px; }
 .results-context h3 { margin: 0 0 var(--space-3); font-size: var(--text-base); font-weight: 600; }
 .results-context p { color: var(--faint); font-size: var(--results-text); }
 @media (max-width: 52rem) {
-  .results-highlights, .results-context { grid-template-columns: 1fr; }
+  .results-context { grid-template-columns: 1fr; }
   .results-context section { padding: var(--space-5) 0; }
   .results-context section + section { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); }
   .comparison-table th:first-child { position: sticky; left: 0; z-index: 1; background: var(--foreground); border-right: 1px solid var(--line); }

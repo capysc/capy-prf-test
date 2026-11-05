@@ -65,25 +65,12 @@ const matrices = [
 
 export function ResultsPage() {
   return <Page title="Passkey Lab" results>
-    <section className="results-intro" aria-labelledby="results-title">
-      <p className="results-eyebrow">FIELD NOTES · CROSS-DEVICE PRF</p>
-      <h2 id="results-title" className="results-title">Same passkey. Different paths.</h2>
-      <p className="results-lede">What happened when the same disposable passkey was used across browsers, devices and password managers.</p>
-      <p className="results-date">Latest results <span aria-hidden="true">·</span> <time dateTime={LATEST_RESULTS_DATE}>November 4, 2026</time> <span className="date-zone">(Pacific)</span></p>
-    </section>
-
-    <div className="results-highlights">
-      <section className="result-highlight"><span className="highlight-label">1Password · direct extension</span><strong>Passes both directions</strong><p>Safari ↔ Chrome extension. Matching original-input keys.</p></section>
-      <section className="result-highlight"><span className="highlight-label">Chrome Password Manager · direct</span><strong>Passes both directions</strong><p>Actual verification on both devices; desktop requested required.</p></section>
-      <section className="result-highlight"><span className="highlight-label">1Password · QR</span><strong>Different keys</strong><p>Earlier runs show a relative input-hashing shift in both directions.</p></section>
-    </div>
-
     <section className="results-section" aria-labelledby="comparison-heading">
       <div className="section-heading"><h2 id="comparison-heading">The full comparison</h2><span>10 completed tests</span></div>
       <p className="section-description">Direct selection and QR are different paths. “Pass” means the consumer’s original-input key opens the creator’s original-input ciphertext.</p>
       <div className="table-scroll" role="region" aria-labelledby="comparison-heading" tabIndex={0}>
         <table className="comparison-table">
-          <caption>Completed manual comparisons, as reported on November 4, 2026.</caption>
+          <caption>Latest results: <time dateTime={LATEST_RESULTS_DATE}>November 4, 2026</time> (Pacific).</caption>
           <thead><tr><th scope="col">Test</th><th scope="col">Creator</th><th scope="col">Consumer</th><th scope="col">Requested verification<br /><span className="column-detail">Creator → Consumer</span></th><th scope="col">Creator key</th><th scope="col">Consumer key</th><th scope="col">Original decryption</th><th scope="col">What it means / proposed fix</th></tr></thead>
           <tbody>{comparisons.map((test) => <tr key={test.number}>
             <th scope="row"><a href={`#test-${test.number}`} id={`test-${test.number}`} className="test-number">{String(test.number).padStart(2, '0')}</a>{test.testId ? <span className="test-reference">{test.testId}</span> : <span className="test-reference">No submitted ID</span>}</th>
