@@ -1,12 +1,15 @@
 {
   "stableUrl": "https://capy-prf-test.vercel.app/",
-  "deploymentId": "dpl_H3FfxqTKRHcBuFr4LhtHW5w6xnWA",
-  "deploymentUrl": "capy-prf-test-cimluufni-capy-f3acb629.vercel.app",
+  "deploymentId": "dpl_qBbWYMsnuwf8ck9G3djPWEnKVXfr",
   "readyState": "READY",
-  "target": "production",
-  "sourceRevision": "bfea61e300c03816f233ca43ce9c97c9d81de7b1",
+  "sourceRevision": "bbd03d693ba1e0f91870e59f3b611c0f6fe3b6fc",
   "branch": "codex/standalone-prf-test",
-  "verifiedAt": "2026-11-05T03:29:43.604536+00:00",
+  "repository": "https://github.com/cvince/capy-prf-test",
+  "gitTriggered": true,
+  "sourceVerification": "GitHub Vercel success status for exact source commit matches live deployment ID",
+  "blogSource": "cvince/blog",
+  "blogRevision": "b4e953d34938438f3fdb1acd3aa0de7edf6d4e9c",
+  "verifiedAt": "2026-11-05T03:41:04.152270+00:00",
   "assets": [
     {
       "path": "/",
@@ -17,20 +20,12 @@
       "sha256": "21e2bf3d0abaf2f68a813f51d3fce70e2f6e0a0cc1669629600a1d6d9a41329a"
     },
     {
-      "path": "/prf-test",
-      "status": 200,
-      "url": "https://capy-prf-test.vercel.app/prf-test",
-      "contentType": "text/html; charset=utf-8",
-      "csp": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
-      "sha256": "21e2bf3d0abaf2f68a813f51d3fce70e2f6e0a0cc1669629600a1d6d9a41329a"
-    },
-    {
       "path": "/app.js",
       "status": 200,
       "url": "https://capy-prf-test.vercel.app/app.js",
       "contentType": "application/javascript; charset=utf-8",
       "csp": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
-      "sha256": "e6af6d8f1494cbeb83f9e081de8ee239364b7acb4f51eb09fd34f1d3b9b03d97"
+      "sha256": "7e1f88036702a0e033c582c4efb82511ca56c89ec7834872cd9ea3edd8bd35c9"
     },
     {
       "path": "/style.css",
@@ -38,15 +33,47 @@
       "url": "https://capy-prf-test.vercel.app/style.css",
       "contentType": "text/css; charset=utf-8",
       "csp": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
-      "sha256": "5e68828951c66654369a2d502abc46d2476a7e7a0a6ed30dcde84a572a84e387"
+      "sha256": "accc25b75c1dc684a01c3ee4f2a41deca4400fc8495d9ff198a526855d462f29"
+    },
+    {
+      "path": "/fonts/vend-sans-latin.woff2",
+      "status": 200,
+      "url": "https://capy-prf-test.vercel.app/fonts/vend-sans-latin.woff2",
+      "contentType": "font/woff2",
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
+      "sha256": "4b956befd0bafff93a36a8ef75b508fe5ce4400242d2cfe362a32bc3c4de8452"
+    },
+    {
+      "path": "/fonts/lora-latin.woff2",
+      "status": 200,
+      "url": "https://capy-prf-test.vercel.app/fonts/lora-latin.woff2",
+      "contentType": "font/woff2",
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
+      "sha256": "6b102ab35aa1f2b315788bb4853434ed1e52137603bf7a3da71a682276748d45"
+    },
+    {
+      "path": "/fonts/Vend-Sans-OFL.txt",
+      "status": 200,
+      "url": "https://capy-prf-test.vercel.app/fonts/Vend-Sans-OFL.txt",
+      "contentType": "text/plain; charset=utf-8",
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
+      "sha256": "b9511bc8cb3b35d82086718739f368efa50c520e084cc28192bd275b39fe5cc8"
+    },
+    {
+      "path": "/fonts/Lora-OFL.txt",
+      "status": 200,
+      "url": "https://capy-prf-test.vercel.app/fonts/Lora-OFL.txt",
+      "contentType": "text/plain; charset=utf-8",
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
+      "sha256": "1d9a970809ac804b582a6ce7f0ebc4e7fefcbfd7ff6299cad35ee656a21be716"
     }
   ],
   "checks": {
     "typecheck": "pass",
-    "cryptoTests": "5 pass, 27 assertions",
     "build": "pass",
-    "uiTests": "not run, per user instruction",
-    "manualPasskeyAcceptance": "pending"
+    "crypto": "unchanged; previous 5 pass, 27 assertions retained",
+    "uiBrowserTests": "not run per user instruction",
+    "manualAcceptance": "pending"
   },
-  "requiredRetry": "explicit click after USER_NOT_VERIFIED; default remains preferred; actual UV mandatory"
+  "recordKind": "verified application source snapshot; later metadata-only commits do not alter application assets"
 }
