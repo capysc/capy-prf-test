@@ -40,7 +40,8 @@ The private source repository is `https://github.com/capysc/capy-prf-test`. Verc
 decryption matrix, requested verification policies, observed key relationships
 and interpretation limits. Latest results are dated **November 4, 2026**
 (Pacific), rather than using the visitor's clock. Only sanitized summaries and
-test IDs are published; no credential IDs or raw PRF outputs are included.
+test numbers are published; no report IDs, credential IDs or raw PRF outputs
+are included. Both tables show creator and consumer for every numbered test.
 
 The header's Results link opens in a separate tab to preserve an in-progress
 test's memory. Links are blue in light mode and teal in dark mode. The results

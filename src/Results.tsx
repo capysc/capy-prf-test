@@ -1,50 +1,52 @@
 import { Page } from './ui';
 
 export const LATEST_RESULTS_DATE = '2026-11-04';
+const alignedCases = [true, false, false, true] as const;
+type VerificationPolicy = 'Preferred' | 'Required';
 
 type Comparison = Readonly<{
   number: number;
-  testId: string | null;
   creator: readonly [string, string];
   consumer: readonly [string, string];
-  verification: readonly [string, string];
+  verification: readonly [VerificationPolicy, VerificationPolicy];
+  decryptionCases: readonly [boolean, boolean, boolean, boolean];
   creatorKey: string;
   consumerKey: string;
   passes: boolean;
-  implication: string;
+  vendorAction: string;
 }>;
 
 const comparisons: readonly Comparison[] = [
-  { number: 1, testId: null, creator: ['iPhone Safari', '1Password'], consumer: ['Chrome · QR', 'iPhone · 1Password'],
+  { number: 1, decryptionCases: [false, false, true, false], creator: ['iPhone Safari', '1Password'], consumer: ['Chrome · QR', 'iPhone · 1Password'],
     verification: ['Preferred', 'Preferred'], creatorKey: 'P(x)', consumerKey: 'P(D(x))', passes: false,
-    implication: 'Phone’s extra-hashed-input key matches QR’s original-input key. Additional wrapping protection is proposed.' },
-  { number: 2, testId: 'PRF-4F1C26AF', creator: ['Chrome · QR', 'iPhone · 1Password'], consumer: ['iPhone Safari', '1Password'],
+    vendorAction: '1Password + Apple: audit PRF input handling at the QR/provider hand-off. Local and QR must evaluate the same input. Check Chrome’s boundary too; owner unconfirmed.' },
+  { number: 2, decryptionCases: [false, true, false, false], creator: ['Chrome · QR', 'iPhone · 1Password'], consumer: ['iPhone Safari', '1Password'],
     verification: ['Preferred', 'Preferred'], creatorKey: 'P(D(x))', consumerKey: 'P(x)', passes: false,
-    implication: 'Phone’s extra-hashed-input key decrypts the QR-created message. The original-input key does not.' },
-  { number: 3, testId: 'PRF-1877CC72', creator: ['iPhone Safari', 'Apple Passwords'], consumer: ['Chrome · QR', 'iPhone · Apple Passwords'],
+    vendorAction: 'Same QR/provider issue in reverse. Locate the relative extra input transform in 1Password, Apple’s bridge or Chrome before assigning ownership.' },
+  { number: 3, decryptionCases: alignedCases, creator: ['iPhone Safari', 'Apple Passwords'], consumer: ['Chrome · QR', 'iPhone · Apple Passwords'],
     verification: ['Preferred', 'Preferred'], creatorKey: 'P(x)', consumerKey: 'P(x)', passes: true,
-    implication: 'Matching inputs produce matching keys. No hash compensation needed.' },
-  { number: 4, testId: 'PRF-08C420EE', creator: ['Chrome · QR', 'iPhone · Apple Passwords'], consumer: ['iPhone Safari', 'Apple Passwords'],
+    vendorAction: 'Apple: no PRF fix indicated for this tested QR path.' },
+  { number: 4, decryptionCases: alignedCases, creator: ['Chrome · QR', 'iPhone · Apple Passwords'], consumer: ['iPhone Safari', 'Apple Passwords'],
     verification: ['Preferred', 'Preferred'], creatorKey: 'P(x)', consumerKey: 'P(x)', passes: true,
-    implication: 'The reverse QR direction also works without hash compensation.' },
-  { number: 5, testId: 'PRF-980F6785', creator: ['iPhone Safari', 'Apple Passwords'], consumer: ['Desktop Chrome · direct', 'Apple Passwords'],
+    vendorAction: 'Apple: no PRF fix indicated for the reverse QR path.' },
+  { number: 5, decryptionCases: alignedCases, creator: ['iPhone Safari', 'Apple Passwords'], consumer: ['Desktop Chrome · direct', 'Apple Passwords'],
     verification: ['Preferred', 'Preferred'], creatorKey: 'P(x)', consumerKey: 'P(x)', passes: true,
-    implication: 'Direct access works with matching original-input keys.' },
-  { number: 6, testId: 'PRF-47A435BA', creator: ['Desktop Chrome · direct', 'Apple Passwords'], consumer: ['iPhone Safari', 'Apple Passwords'],
+    vendorAction: 'Apple: no PRF fix indicated for this direct path.' },
+  { number: 6, decryptionCases: alignedCases, creator: ['Desktop Chrome · direct', 'Apple Passwords'], consumer: ['iPhone Safari', 'Apple Passwords'],
     verification: ['Preferred', 'Preferred'], creatorKey: 'P(x)', consumerKey: 'P(x)', passes: true,
-    implication: 'Reverse direct access works with matching original-input keys.' },
-  { number: 7, testId: 'PRF-654DD521', creator: ['iPhone Chrome', 'Chrome Password Manager'], consumer: ['Desktop Chrome · direct', 'Chrome Password Manager'],
+    vendorAction: 'Apple: no PRF fix indicated for the reverse direct path.' },
+  { number: 7, decryptionCases: alignedCases, creator: ['iPhone Chrome', 'Chrome Password Manager'], consumer: ['Desktop Chrome · direct', 'Chrome Password Manager'],
     verification: ['Preferred', 'Required'], creatorKey: 'P(x)', consumerKey: 'P(x)', passes: true,
-    implication: 'An earlier desktop preferred attempt lacked UV. The explicit required check passed on the new Lab origin.' },
-  { number: 8, testId: 'PRF-D0FB1AFF', creator: ['Desktop Chrome · direct', 'Chrome Password Manager'], consumer: ['iPhone Chrome', 'Chrome Password Manager'],
+    vendorAction: 'Google: review desktop verification behavior. An earlier preferred attempt lacked actual UV; required passed on the Lab origin. No PRF hash bug is demonstrated here.' },
+  { number: 8, decryptionCases: alignedCases, creator: ['Desktop Chrome · direct', 'Chrome Password Manager'], consumer: ['iPhone Chrome', 'Chrome Password Manager'],
     verification: ['Required', 'Preferred'], creatorKey: 'P(x)', consumerKey: 'P(x)', passes: true,
-    implication: 'Creator’s preferred attempt lacked UV. The explicit required retry passed.' },
-  { number: 9, testId: 'PRF-41E6EA9A', creator: ['iPhone Safari', '1Password'], consumer: ['Desktop Chrome · direct', '1Password extension'],
+    vendorAction: 'Google: review desktop verification behavior. Creator’s preferred attempt lacked actual UV; required passed. Preferred permits no UV, so this alone is not a confirmed vendor bug.' },
+  { number: 9, decryptionCases: alignedCases, creator: ['iPhone Safari', '1Password'], consumer: ['Desktop Chrome · direct', '1Password extension'],
     verification: ['Preferred', 'Preferred'], creatorKey: 'P(x)', consumerKey: 'P(x)', passes: true,
-    implication: 'The direct extension path works without hash compensation.' },
-  { number: 10, testId: 'PRF-195F35EA', creator: ['Desktop Chrome · direct', '1Password extension'], consumer: ['iPhone Safari', '1Password'],
+    vendorAction: '1Password: no PRF fix indicated for the direct extension path; the observed mismatch is on the earlier QR path.' },
+  { number: 10, decryptionCases: alignedCases, creator: ['Desktop Chrome · direct', '1Password extension'], consumer: ['iPhone Safari', '1Password'],
     verification: ['Required', 'Preferred'], creatorKey: 'P(x)', consumerKey: 'P(x)', passes: true,
-    implication: 'Reverse extension access works. Required was used; this report does not establish that preferred failed.' },
+    vendorAction: '1Password: no PRF fix indicated for the reverse direct extension path. This report does not establish that preferred failed.' },
 ];
 
 function Verdict({ passes, expected = false }: Readonly<{ passes: boolean; expected?: boolean }>) {
@@ -57,11 +59,9 @@ function Path({ value }: Readonly<{ value: readonly [string, string] }>) {
   return <><span className="cell-primary">{value[0]}</span><span className="cell-secondary">{value[1]}</span></>;
 }
 
-const matrices = [
-  { label: '1', values: [false, false, true, false], aligned: false },
-  { label: '2', values: [false, true, false, false], aligned: false },
-  { label: '3–10', values: [true, false, false, true], aligned: true },
-] as const;
+function Policy({ value }: Readonly<{ value: VerificationPolicy }>) {
+  return <span className={value === 'Required' ? 'verification-required' : undefined}>{value}</span>;
+}
 
 export function ResultsPage() {
   return <Page title="Passkey Lab" results>
@@ -71,17 +71,18 @@ export function ResultsPage() {
       <div className="table-scroll" role="region" aria-labelledby="comparison-heading" tabIndex={0}>
         <table className="comparison-table">
           <caption>Latest results: <time dateTime={LATEST_RESULTS_DATE}>November 4, 2026</time> (Pacific).</caption>
-          <thead><tr><th scope="col">Test</th><th scope="col">Creator</th><th scope="col">Consumer</th><th scope="col">Requested verification<br /><span className="column-detail">Creator → Consumer</span></th><th scope="col">Creator key</th><th scope="col">Consumer key</th><th scope="col">Original decryption</th><th scope="col">What it means / proposed fix</th></tr></thead>
+          <thead><tr><th scope="col">Test</th><th scope="col">Creator</th><th scope="col">Consumer</th><th scope="col">Requested verification<br /><span className="column-detail">Creator → Consumer</span></th><th scope="col">Creator key</th><th scope="col">Consumer key</th><th scope="col">Original decryption</th><th scope="col">Vendor follow-up / proposed fix</th></tr></thead>
           <tbody>{comparisons.map((test) => <tr key={test.number}>
-            <th scope="row"><a href={`#test-${test.number}`} id={`test-${test.number}`} className="test-number">{String(test.number).padStart(2, '0')}</a>{test.testId ? <span className="test-reference">{test.testId}</span> : <span className="test-reference">No submitted ID</span>}</th>
+            <th scope="row"><a href={`#test-${test.number}`} id={`test-${test.number}`} className="test-number">{String(test.number).padStart(2, '0')}</a></th>
             <td><Path value={test.creator} /></td><td><Path value={test.consumer} /></td>
-            <td className="verification-cell"><span>{test.verification[0]}</span><span className="cell-secondary">→ {test.verification[1]}</span></td>
+            <td className="verification-cell"><Policy value={test.verification[0]} /><span className="cell-secondary">→ <Policy value={test.verification[1]} /></span></td>
             <td className="key-cell"><code>{test.creatorKey}</code></td><td className="key-cell"><code>{test.consumerKey}</code></td>
-            <td><Verdict passes={test.passes} /></td><td className="implication-cell">{test.implication}</td>
+            <td><Verdict passes={test.passes} /></td><td className="vendor-action-cell">{test.vendorAction}</td>
           </tr>)}</tbody>
         </table>
       </div>
       <div className="results-note"><p><strong>Reading the keys.</strong> <code>P(x)</code> is the phone-local PRF output for that test’s credential. <code>D(x)</code> is the WebAuthn input hash. This is an observed relative relationship, not a claim about internal hash counts. Keys from different tests are not compared.</p><p>All completed comparisons had actual user verification on both devices. Tests 1–6’s requested policies come from the diagnostic implementation; Tests 7–10 include them in their reports. A UV-blocked attempt has no accepted crypto result.</p></div>
+      <p className="results-note"><strong>Vendor ownership is unconfirmed.</strong> The QR and direct runs used different origins and credentials. The investigation should check the raw-versus-already-hashed hand-off: <a href="https://github.com/1Password/passkey-rs/blob/1606717bd9888b629905d435bb876b24b1aaddb5/passkey-types/src/webauthn/extensions/mod.rs#L36">1Password’s Apple input contract</a> and <a href="https://chromium.googlesource.com/chromium/src/+/main/ios/chrome/credential_provider_extension/passkey_util.mm#37">Chromium’s iOS adapter</a> identify relevant public boundaries, not proof of the installed bug’s owner.</p>
     </section>
 
     <section className="results-section" aria-labelledby="matrix-heading">
@@ -90,8 +91,12 @@ export function ResultsPage() {
       <div className="table-scroll" role="region" aria-labelledby="matrix-heading" tabIndex={0}>
         <table className="matrix-table">
           <caption>Columns show creator encryption input → consumer decryption input.</caption>
-          <thead><tr><th scope="col">Tests</th><th scope="col">Original → Original</th><th scope="col">Original → Extra-hashed</th><th scope="col">Extra-hashed → Original</th><th scope="col">Extra-hashed → Extra-hashed</th></tr></thead>
-          <tbody>{matrices.map((row) => <tr key={row.label}><th scope="row">{row.label}</th>{row.values.map((passes, index) => <td key={index}><Verdict passes={passes} expected={row.aligned && !passes} /></td>)}</tr>)}</tbody>
+          <thead><tr><th scope="col">Test</th><th scope="col">Creator</th><th scope="col">Consumer</th><th scope="col">Original → Original</th><th scope="col">Original → Extra-hashed</th><th scope="col">Extra-hashed → Original</th><th scope="col">Extra-hashed → Extra-hashed</th></tr></thead>
+          <tbody>{comparisons.map((test) => <tr key={test.number}>
+            <th scope="row"><a href={`#test-${test.number}`} className="test-number">{String(test.number).padStart(2, '0')}</a></th>
+            <td><Path value={test.creator} /></td><td><Path value={test.consumer} /></td>
+            {test.decryptionCases.map((passes, index) => <td key={index}><Verdict passes={passes} expected={test.passes && !passes} /></td>)}
+          </tr>)}</tbody>
         </table>
       </div>
       <p className="results-note">The cross-input failures in Tests 3–10 are expected: different inputs produce different keys. Tests 1–2 instead have opposite off-diagonal successes, supporting a relative input-hashing shift.</p>
