@@ -19,12 +19,12 @@ type View =
   | Readonly<{ step: 'transfer'; packet: PrfUnifiedTest }>
   | Readonly<{ step: 'paste'; device: PrfTestDevice; text: string }>
   | Readonly<{ step: 'check'; device: PrfTestDevice; packet: PrfUnifiedTest }>
-  | Readonly<{ step: 'result'; report: PrfUnifiedReport }>;
+  | Readonly<{ step: 'result'; packet: PrfUnifiedTest; report: PrfUnifiedReport }>;
 
 const DEVICE_LABELS: Readonly<Record<PrfTestDevice, string>> = { phone: 'Phone', desktop: 'Desktop' };
 const STEP_LABELS: Readonly<Record<View['step'], string>> = {
   device: '1. Choose this device', start: '2. Start or continue', create: '3. Create a disposable passkey',
-  encrypt: '4. Encrypt and prepare the test', transfer: '5. Continue on the other device',
+  encrypt: '4. Encrypt and prepare the test', transfer: '5. Transfer or check the test',
   paste: '3. Load the test', check: '4. Approve the check', result: '5. Combined results',
 };
 
@@ -77,7 +77,7 @@ export function PrfSmokeTest({ rpId }: { readonly rpId: string }) {
         ? { step: 'encrypt', device: view.device, credentialId: await createSmokeCredential(rpId) }
         : view.step === 'encrypt'
           ? { step: 'transfer', packet: await createUnifiedPrfTest(rpId, view.credentialId, view.device, navigator.credentials, userVerification) }
-          : { step: 'result', report: await checkUnifiedPrfTest(rpId, view.packet, view.device, navigator.credentials, userVerification) };
+          : { step: 'result', packet: view.packet, report: await checkUnifiedPrfTest(rpId, view.packet, view.device, navigator.credentials, userVerification) };
       setView(next);
       setStatus({ busy: false });
     } catch (error) {
@@ -145,10 +145,8 @@ export function PrfSmokeTest({ rpId }: { readonly rpId: string }) {
       <p>The disposable passkey is ready. Approve it once more to encrypt the test message twice: once with the original-input output, and once with the extra-hashed-input output.</p>
       <p>Use the same passkey and the same provider/path you used to create it.</p>
       <Controls><Button busy={status.busy} onClick={() => void approve()}>Encrypt both cases and prepare test</Button></Controls>
-      {status.code === 'USER_NOT_VERIFIED' ? <>
-        <p>Retry the encryption approval with user verification explicitly required. This uses the same disposable passkey; no new passkey is created. The original approval requests preferred verification.</p>
-        <Controls><Button busy={status.busy} onClick={() => void approve('required')}>Retry with required verification</Button></Controls>
-      </> : null}
+      <p>The default approval requests preferred verification. You can instead explicitly require verification using the same disposable passkey.</p>
+      <Controls><Button busy={status.busy} onClick={() => void approve('required')}>{status.code === 'USER_NOT_VERIFIED' ? 'Retry with required verification' : 'Encrypt with required verification'}</Button></Controls>
     </> : null}
 
     {view.step === 'transfer' ? <>
@@ -156,6 +154,11 @@ export function PrfSmokeTest({ rpId }: { readonly rpId: string }) {
       <p>Choose that device, then <strong>Continue test from another device</strong>. Paste the test and choose <strong>Load test</strong>. You do not need to create another passkey.</p>
       <Field id={`${fieldId}-test`} label="Test for the other device" multiline rows={6} readOnly value={packetText} />
       <Controls><Button busy={status.busy} onClick={() => void copy(`${fieldId}-test`, packetText, 'Test copied. Continue on the other device using this same page.')}>Copy test for other device</Button></Controls>
+      <p>To compare verification policies on this device instead, check this same test here. This is separate from a phone QR comparison.</p>
+      <Controls><Button disabled={status.busy} onClick={() => {
+        setView({ step: 'check', device: view.packet.sourceDevice, packet: view.packet });
+        setStatus({ busy: false });
+      }}>Check on this device</Button></Controls>
     </> : null}
 
     {view.step === 'paste' ? <>
@@ -172,15 +175,13 @@ export function PrfSmokeTest({ rpId }: { readonly rpId: string }) {
       {!view.packet.hashedSample ? <p>This older packet contains only the original-input message. Start a new test to evaluate all four combinations.</p> : null}
       <p>Choose the same passkey using the provider/path you are testing on this device. Direct selection and phone QR are both supported.</p>
       <Controls><Button busy={status.busy} onClick={() => void approve()}>Check Passkey Equality</Button></Controls>
-      {status.code === 'USER_NOT_VERIFIED' ? <>
-        <p>Separate experiment: retry this same test with user verification explicitly required. Your packet and Test ID stay unchanged. The original check requests preferred verification.</p>
-        <Controls><Button busy={status.busy} onClick={() => void approve('required')}>Retry with required verification</Button></Controls>
-      </> : null}
+      <p>The default check requests preferred verification. The required-verification check uses the same passkey, encrypted test and Test ID.</p>
+      <Controls><Button busy={status.busy} onClick={() => void approve('required')}>{status.code === 'USER_NOT_VERIFIED' ? 'Retry with required verification' : 'Check with required verification'}</Button></Controls>
     </> : null}
 
     {view.step === 'result' ? <>
       <MessageBox role="status" title={view.report.samePrf ? 'Matching keys' : 'Different keys'}>
-        <p>{view.report.samePrf ? 'The two devices returned matching PRF keys.' : 'The two devices returned different PRF keys.'}</p>
+        <p>{view.report.samePrf ? 'The fresh approval returned matching PRF keys.' : 'The fresh approval returned different PRF keys.'}</p>
         <p>{view.report.checkingResult.opensTest ? 'This device opened the encrypted test from the other device.' : 'This device could not open the encrypted test from the other device.'}</p>
       </MessageBox>
       <p>Each case below uses a fresh output from this device. “Extra-hashed” means our page hashes the input once before passing it to WebAuthn.</p>
@@ -191,6 +192,10 @@ export function PrfSmokeTest({ rpId }: { readonly rpId: string }) {
       <p>{DEVICE_LABELS[view.report.sourceDevice]} → {DEVICE_LABELS[view.report.checkingDevice]}. Copy the combined results below and paste them into our chat. No field extraction is needed.</p>
       <Field id={`${fieldId}-results`} label="Combined results" multiline rows={12} readOnly value={reportText} />
       <Controls><Button busy={status.busy} onClick={() => void copy(`${fieldId}-results`, reportText, 'Results copied. Paste them into our chat.')}>Copy results for chat</Button></Controls>
+      <Controls><Button disabled={status.busy} onClick={() => {
+        setView({ step: 'check', device: view.report.checkingDevice, packet: view.packet });
+        setStatus({ busy: false });
+      }}>Check again</Button></Controls>
     </> : null}
 
     {status.message ? <MessageBox role="status"><p>{status.message}</p></MessageBox> : null}
