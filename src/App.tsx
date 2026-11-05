@@ -62,6 +62,7 @@ export function PrfSmokeTest({ rpId }: { readonly rpId: string }) {
   const [status, setStatus] = useState<Readonly<{ busy: boolean; message?: string; code?: string }>>({ busy: false });
   const packetText = view.step === 'transfer' ? JSON.stringify(view.packet, null, 2) : '';
   const reportText = view.step === 'result' ? JSON.stringify(view.report, null, 2) : '';
+  const overallPassed = view.step === 'result' && view.report.samePrf && view.report.checkingResult.opensTest;
   const device = view.step === 'device' ? null : view.step === 'transfer' ? view.packet.sourceDevice
     : view.step === 'result' ? view.report.checkingDevice : view.device;
   const testId = view.step === 'transfer' || view.step === 'check' ? view.packet.testId
@@ -203,5 +204,6 @@ export function PrfSmokeTest({ rpId }: { readonly rpId: string }) {
       <Controls><Button variant="secondary" disabled={status.busy} onClick={restart}>Restart this test</Button></Controls>
       <p>Restart clears only this page’s test state.</p>
     </> : null}
+    {view.step === 'result' ? <p className={overallPassed ? 'overall-pass' : 'overall-fail'}><strong>Overall Result: {overallPassed ? 'PASS' : 'FAIL'}</strong></p> : null}
   </Page>;
 }

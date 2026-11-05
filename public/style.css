@@ -783,3 +783,6 @@ details p { margin-top: var(--space-3); }
 
 /* SquareLogo / Mark: the actual Keep square mark, at the header’s leading edge. */
 .capy-mark { flex: 0 0 auto; filter: invert(var(--logo-invert)); }
+
+.overall-pass { color: var(--ok-ink); }
+.overall-fail { color: var(--danger-ink); }
