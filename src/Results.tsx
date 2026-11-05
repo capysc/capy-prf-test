@@ -88,12 +88,13 @@ export function ResultsPage() {
       <div className="results-note">
         <p><strong>Reading the keys</strong></p>
         <dl className="key-legend">
-          <dt><code>x</code></dt><dd>The original input supplied to the passkey.</dd>
-          <dt><code>D(x)</code></dt><dd>The extra-hashed input: <code>SHA-256(UTF8("WebAuthn PRF") || 0x00 || x)</code>.</dd>
-          <dt><code>P(x)</code></dt><dd>The phone-local PRF output for this passkey using the original input.</dd>
-          <dt><code>P(D(x))</code></dt><dd>The phone-local PRF output when given the extra-hashed input. <strong>In simpler terms:</strong> instead of giving the phone’s passkey the original input, we hash that input first and ask it for a key using the hashed version. Think of this as an extra preparation step before key generation—not wrapping or encrypting the data twice.</dd>
+          <dt><code>x</code></dt><dd>The original input given to the passkey.</dd>
+          <dt><code>D(x)</code></dt><dd>A hashed version of that input, used for comparison.</dd>
+          <dt><code>P(x)</code></dt><dd>The encryption key the phone returns for the original input.</dd>
+          <dt><code>P(D(x))</code></dt><dd>The different key the phone returns when given the hashed input.</dd>
         </dl>
-        <p>In Tests 1–2, QR’s original-input key matched the phone’s <code>P(D(x))</code> key. The notation describes that observed relationship; each test uses its own credential.</p>
+        <p><strong>In simpler terms:</strong> the phone and QR routes returned different keys for the same passkey. In the failing tests, the QR route behaved as though the input had been hashed an extra time. That changed the key, so data encrypted on one route could not be unlocked normally on the other.</p>
+        <p>The extra-hashed test helps identify this mismatch. Compatible implementations should return the same key for the same passkey and input on both routes.</p>
       </div>
       <p className="results-note"><strong>Vendor ownership is unconfirmed.</strong> The QR and direct runs used different origins and credentials. The investigation should check the raw-versus-already-hashed hand-off: <a href="https://github.com/1Password/passkey-rs/blob/1606717bd9888b629905d435bb876b24b1aaddb5/passkey-types/src/webauthn/extensions/mod.rs#L36">1Password’s Apple input contract</a> and <a href="https://chromium.googlesource.com/chromium/src/+/main/ios/chrome/credential_provider_extension/passkey_util.mm#37">Chromium’s iOS adapter</a> identify relevant public boundaries, not proof of the installed bug’s owner.</p>
     </section>
