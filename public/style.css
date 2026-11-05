@@ -1,27 +1,65 @@
-:root { color-scheme: light dark; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f4f5f7; color: #1c2534; line-height: 1.55; }
+/* Visual source: cvince/blog b4e953d — app/globals.css, app/layout.tsx,
+   app/markdown.css and app/[slug]/post-nav.tsx. Fonts are served locally. */
+@font-face { font-family: "Vend Sans"; font-style: normal; font-weight: 300 700; font-display: swap; src: url("/fonts/vend-sans-latin.woff2") format("woff2"); }
+@font-face { font-family: "Lora"; font-style: normal; font-weight: 400 700; font-display: swap; src: url("/fonts/lora-latin.woff2") format("woff2"); }
+:root {
+  color-scheme: light dark;
+  --background: #ffffff;
+  --foreground: #171717;
+  --muted: #737373;
+  --border: #d4d4d4;
+  --rule: #e5e5e5;
+  --hover: #fafafa;
+  --code: #f3f4f6;
+  --font-sans: "Vend Sans", sans-serif;
+  --font-prose: "Lora", serif;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 * { box-sizing: border-box; }
-body { margin: 0; padding: 24px 16px 48px; }
-main, footer { max-width: 780px; margin: 0 auto; }
-main { padding: 28px; background: #fff; border: 1px solid #d7dce4; border-radius: 14px; }
-header { margin-bottom: 24px; }
-h1 { margin: 4px 0 12px; font-size: clamp(26px, 5vw, 36px); line-height: 1.15; letter-spacing: -.035em; }
-h2 { margin: 0 0 10px; font-size: 20px; }
-p { margin: 12px 0; }
-.eyebrow { margin: 0; color: #5a6474; font-size: 13px; font-weight: 650; letter-spacing: .06em; text-transform: uppercase; }
-.controls { display: flex; flex-wrap: wrap; gap: 12px; margin: 20px 0; }
-button { appearance: none; background: #243f91; color: #fff; border: 1px solid #243f91; border-radius: 8px; padding: 12px 16px; font: inherit; font-weight: 650; cursor: pointer; min-height: 48px; }
-button:disabled { opacity: .55; cursor: wait; }
-button.secondary { background: transparent; color: inherit; border-color: #a9b3c3; }
-button:focus-visible, textarea:focus-visible { outline: 3px solid #6985df; outline-offset: 3px; }
-.field { margin: 20px 0; }
-label { display: block; font-weight: 650; margin-bottom: 8px; }
-textarea { display: block; width: 100%; resize: vertical; padding: 12px; border: 1px solid #a9b3c3; border-radius: 8px; background: #f8f9fb; color: inherit; font: 16px/1.45 ui-monospace, SFMono-Regular, monospace; overflow-wrap: anywhere; }
-.message { margin: 24px 0; padding: 16px 20px; border: 1px solid #a9b3c3; border-radius: 8px; background: #f0f4fc; }
+body { margin: 0; }
+.site-nav { display: flex; justify-content: space-between; align-items: center; gap: 24px; width: 100%; padding: 24px; font-family: var(--font-sans); font-size: 14px; }
+.site-nav a { color: inherit; font-size: 16px; font-weight: 700; text-decoration: none; }
+.site-nav span { color: var(--muted); }
+.site-nav a:hover { text-decoration: underline; }
+main, footer { width: 100%; max-width: 672px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+main { padding-top: 80px; padding-bottom: 32px; font-family: var(--font-prose); }
+header { margin-bottom: 32px; }
+h1 { font: 700 36px/1.5 var(--font-sans); margin: 0 0 24px; }
+h2 { font: 600 20px/1.5 var(--font-sans); margin: 0 0 16px; }
+p { margin: 0 0 16px; line-height: 1.75; }
+.step { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); font: 14px/1.5 var(--font-sans); }
+.test-id { padding: 12px 0; font: 14px/1.75 var(--font-sans); }
+.controls { display: flex; flex-wrap: wrap; gap: 12px; margin: 24px 0; font-family: var(--font-sans); }
+button { appearance: none; min-height: 48px; padding: 12px 20px; border: 1px solid var(--border); border-radius: 0; background: transparent; color: inherit; font: 500 15px/1.5 var(--font-sans); cursor: pointer; transition: background-color .2s, opacity .2s; }
+button:hover:enabled { background: var(--hover); }
+button:disabled { opacity: .5; cursor: wait; }
+button.secondary { border-color: transparent; padding-left: 0; padding-right: 0; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+button.secondary:hover:enabled { background: transparent; color: var(--foreground); }
+button:focus-visible, textarea:focus-visible, a:focus-visible, summary:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+.field { margin: 32px 0 24px; }
+label { display: block; margin-bottom: 12px; font: 500 14px/1.5 var(--font-sans); }
+textarea { display: block; width: 100%; min-width: 0; padding: 16px; resize: vertical; border: 1px solid var(--border); border-radius: 0; background: var(--background); color: inherit; font: 16px/1.5 ui-monospace, SFMono-Regular, monospace; overflow-wrap: anywhere; }
+.message { margin: 32px 0; padding: 24px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
 .message p:last-child { margin-bottom: 0; }
-ul { padding-left: 22px; }
-li { margin: 10px 0; }
-footer { margin-top: 24px; color: #5a6474; font-size: 14px; padding: 0 8px; }
-code { overflow-wrap: anywhere; }
-summary { cursor: pointer; font-weight: 650; }
-@media (max-width: 520px) { body { padding: 12px 10px 32px; } main { padding: 20px 16px; } .controls > button { width: 100%; } }
-@media (prefers-color-scheme: dark) { :root { background: #11151d; color: #e6eaf1; } main { background: #1b2230; border-color: #394458; } textarea { background: #121925; border-color: #657189; } .eyebrow, footer { color: #b4bed0; } .message { background: #222f49; border-color: #657189; } button { background: #465fc0; border-color: #465fc0; } }
+ul { padding-left: 24px; margin: 0 0 24px; }
+li { margin: 0 0 8px; line-height: 1.75; }
+strong { font-weight: 700; }
+footer { margin-top: 24px; padding-top: 32px; padding-bottom: 48px; border-top: 1px solid var(--rule); color: var(--muted); font: 14px/1.75 var(--font-sans); }
+code { background: var(--code); border-radius: 4px; padding: 2px 6px; overflow-wrap: anywhere; font: 13px/1.5 ui-monospace, monospace; }
+summary { cursor: pointer; font-weight: 500; color: var(--foreground); margin-bottom: 16px; }
+@media (max-width: 520px) {
+  .site-nav { padding: 20px 24px; gap: 16px; }
+  .site-nav span { font-size: 12px; }
+  main { padding-top: 48px; }
+  h1 { font-size: 30px; line-height: 1.4; }
+  .controls > button { width: 100%; }
+  button.secondary { text-align: left; }
+}
+@media (prefers-color-scheme: dark) {
+  :root { --background: #000000; --foreground: #ffffff; --muted: #a3a3a3; --border: #404040; --rule: #262626; --hover: #171717; --code: #111827; }
+}

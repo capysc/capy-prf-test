@@ -1,7 +1,13 @@
 import type { ComponentProps, ReactNode } from 'react';
 
 export function Page({ title, children }: Readonly<{ title: string; lockup?: string; children: ReactNode }>) {
-  return <main><header><p className="eyebrow">Standalone browser experiment</p><h1>{title}</h1></header>{children}</main>;
+  return <>
+    <nav className="site-nav" aria-label="Site">
+      <a href="https://www.vincentchan.vc" target="_blank" rel="noreferrer">vincent chan.</a>
+      <span>Browser experiment</span>
+    </nav>
+    <main><header><h1>{title}</h1></header>{children}</main>
+  </>;
 }
 
 export function Controls({ children }: Readonly<{ children: ReactNode }>) {

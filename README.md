@@ -25,3 +25,11 @@ The default source and consumer assertions request `userVerification: preferred`
 The reports intentionally include disposable PRF outputs for this experiment. Do not use real account or Transport passkeys. No passkey ceremonies are automated by the code's tests.
 
 UI/browser tests are intentionally not used. Existing focused crypto tests are retained; typecheck and static build validate packaging. Manual device acceptance is separate.
+
+## Visual source
+
+The design reuses the actual `cvince/blog` repository at `b4e953d34938438f3fdb1acd3aa0de7edf6d4e9c`, inspected read-only at `/Users/vince/Dev/blog`. References: `app/globals.css`, `app/layout.tsx`, `app/markdown.css`, and `app/[slug]/post-nav.tsx`.
+
+Vend Sans is used for headings and controls, Lora for prose, with white/black backgrounds, neutral rules, a narrow reading column, square outlined controls and quiet text links. The matching Latin font subsets are bundled locally from the blog's built assets; their official Google Fonts OFL notices are included. No blog analytics, app code, or secrets were copied.
+
+The app's private source repository is `https://github.com/cvince/capy-prf-test`. Vercel project `capy-prf-test` is connected to its `codex/standalone-prf-test` branch; pushes on that branch deploy the standalone app. No `main` branch or Capy product deployment is involved.
