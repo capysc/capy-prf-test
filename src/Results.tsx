@@ -71,7 +71,7 @@ export function ResultsPage() {
   return <Page title="Passkey Lab" results>
     <section className="results-section" aria-label="Passkey encryption comparisons">
       <p className="section-description">This table shows whether data encrypted with a passkey can still be unlocked when that same passkey is used on another device, in another browser or through a phone QR flow.</p>
-      <p className="section-description">For apps that use passkeys to protect encrypted data, a successful sign-in is not enough. If the browser or password manager returns a different encryption key, the data stays locked on that device.</p>
+      <p className="section-description">To unlock the same encrypted data across devices, the passkey must produce the same encryption key on each device. If the browser or password manager returns a different encryption key, the data stays locked on that device.</p>
       <p className="section-description">Each row is one setup we tested. The Creator encrypted a message; the Consumer tried to open it using the same passkey. The result shows whether that setup worked out of the box, needed changes or failed.</p>
       <div className="results-note">
         <p><strong>Reading the keys</strong></p>
@@ -79,9 +79,9 @@ export function ResultsPage() {
           <dt><code>x</code></dt><dd>The original input given to the passkey.</dd>
           <dt><code>D(x)</code></dt><dd>A hashed version of that input, used for comparison.</dd>
           <dt><code>P(x)</code></dt><dd>The encryption key the phone returns for the original input.</dd>
-          <dt><code>P(D(x))</code></dt><dd>The different key the phone returns when given the hashed input.</dd>
+          <dt><code>P(D(x))</code></dt><dd>The encryption key the phone incorrectly derives from the hashed input.</dd>
         </dl>
-        <p><strong>In simpler terms:</strong> In the <code>P(D(x))</code> case, the tested 1Password QR flow behaves as though the input is hashed one extra time compared with local Safari. This produces a different encryption key, preventing data encrypted through one path from opening through the other.</p>
+        <p>In the <code>P(D(x))</code> case, the tested 1Password QR flow behaves as though the input is hashed one extra time compared with local Safari. This produces a different encryption key, preventing data encrypted through one path from opening through the other.</p>
       </div>
       <p className="section-description">“Pass” means decryption worked out of the box. “Needs changes” means decryption worked after additional configuration.</p>
       <div className="table-scroll" role="region" aria-label="Passkey encryption comparisons" tabIndex={0}>
