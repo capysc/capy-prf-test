@@ -46,7 +46,7 @@ Latest results: **November 4, 2026**.
 | Chrome Password Manager · phone Chrome ↔ desktop Chrome directly | Needs changes: desktop used required verification in both directions. Keys matched and decryption succeeded; earlier preferred attempts lacked actual UV. |
 | Chrome Password Manager · phone → Chrome QR | An earlier unnumbered run reported a relative input-hashing shift; no complete numbered matrix was supplied for this path. |
 
-[Full results and four-case decryption matrices](https://passkey-lab.capy.sc/results)
+[Full comparison results](https://passkey-lab.capy.sc/results)
 
 These findings describe reported setups. Historical QR and later direct runs
 used different origins and credentials, so they do not isolate route alone or
