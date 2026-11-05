@@ -822,14 +822,16 @@ a { color: var(--link-color); text-decoration: none; }
 .header-link span { margin-left: var(--space-1); }
 .github-link { display: inline-flex; align-items: center; gap: var(--space-2); color: var(--faint); }
 .github-mark { flex: 0 0 auto; }
-.results-page { max-width: var(--results-measure); gap: var(--space-8); }
+.results-page { gap: var(--space-8); }
 .results-page header { padding-bottom: var(--space-6); border-bottom: 1px solid var(--line); }
-.results-section { display: grid; gap: var(--space-4); min-width: 0; }
+.results-section { display: flex; flex-direction: column; gap: var(--space-4); min-width: 0; }
 .contribution-section { max-width: var(--measure-wide); }
 .section-heading { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: var(--space-2); }
 .section-heading h2 { font-size: var(--text-base); }
 .section-description { color: var(--ink); max-width: var(--measure-wide); }
 .table-scroll { overflow-x: auto; background: var(--foreground); }
+/* Prose keeps the homepage width; the table alone extends symmetrically. */
+.results-page .table-scroll { align-self: center; width: min(var(--results-measure), calc(100vw - 2 * var(--space-5))); }
 .results-page table { width: 100%; border-spacing: 0; font-size: var(--text-sm); text-align: left; }
 .results-page caption { text-align: left; color: var(--faint); padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--line); }
 .results-page th, .results-page td { padding: var(--space-4); vertical-align: top; border-bottom: 1px solid var(--line); }
@@ -861,7 +863,7 @@ a { color: var(--link-color); text-decoration: none; }
 .key-legend { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: var(--space-2) var(--space-4); margin: var(--space-3) 0; }
 .key-legend dt, .key-legend dd { margin: 0; }
 .section-divider { width: 100%; margin: 0; border: 0; border-top: 1px solid var(--line-strong); }
-.results-footer { max-width: var(--results-measure); color: var(--ink); }
+.results-footer { color: var(--ink); }
 .footer-links { display: flex; flex-wrap: wrap; gap: var(--space-5); }
 .footer-links a { color: var(--faint); }
 .results-footer .footer-links a { color: var(--ink); }
