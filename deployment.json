@@ -1,71 +1,38 @@
 {
   "stableUrl": "https://capy-prf-test.vercel.app/",
-  "deploymentId": "dpl_qBbWYMsnuwf8ck9G3djPWEnKVXfr",
+  "deploymentId": "dpl_eFpi6uBateNw5BoACWuskegq6dLc",
   "readyState": "READY",
-  "sourceRevision": "bbd03d693ba1e0f91870e59f3b611c0f6fe3b6fc",
+  "sourceRevision": "6f94f25f59e6c9b528509c5bb7322d0dca7f29c0",
   "branch": "codex/standalone-prf-test",
-  "repository": "https://github.com/cvince/capy-prf-test",
+  "repository": "https://github.com/capysc/capy-prf-test",
   "gitTriggered": true,
-  "sourceVerification": "GitHub Vercel success status for exact source commit matches live deployment ID",
-  "blogSource": "cvince/blog",
-  "blogRevision": "b4e953d34938438f3fdb1acd3aa0de7edf6d4e9c",
-  "verifiedAt": "2026-11-05T03:41:04.152270+00:00",
+  "keepSource": "capysc/keep-app",
+  "keepRevision": "f6765478b424c2aaffb28d6c11d0358849604310",
+  "verifiedAt": "2026-11-05T04:04:52.497514+00:00",
   "assets": [
     {
       "path": "/",
       "status": 200,
-      "url": "https://capy-prf-test.vercel.app/",
-      "contentType": "text/html; charset=utf-8",
-      "csp": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
-      "sha256": "21e2bf3d0abaf2f68a813f51d3fce70e2f6e0a0cc1669629600a1d6d9a41329a"
+      "sha256": "5a4ae4632005b78019f04afdb5d3760afff980259163d741a02ff253da519f58",
+      "contentType": "text/html; charset=utf-8"
     },
     {
       "path": "/app.js",
       "status": 200,
-      "url": "https://capy-prf-test.vercel.app/app.js",
-      "contentType": "application/javascript; charset=utf-8",
-      "csp": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
-      "sha256": "7e1f88036702a0e033c582c4efb82511ca56c89ec7834872cd9ea3edd8bd35c9"
+      "sha256": "a067bc8ed8ba9ce7f19bd95d4e105577d4845220ce753545a690b5a03baa9707",
+      "contentType": "application/javascript; charset=utf-8"
     },
     {
       "path": "/style.css",
       "status": 200,
-      "url": "https://capy-prf-test.vercel.app/style.css",
-      "contentType": "text/css; charset=utf-8",
-      "csp": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
-      "sha256": "accc25b75c1dc684a01c3ee4f2a41deca4400fc8495d9ff198a526855d462f29"
+      "sha256": "a89d6e55409a174ac4f55620310d43cd40300e79e515fedeaab8bea1afb71016",
+      "contentType": "text/css; charset=utf-8"
     },
     {
-      "path": "/fonts/vend-sans-latin.woff2",
+      "path": "/prf-test",
       "status": 200,
-      "url": "https://capy-prf-test.vercel.app/fonts/vend-sans-latin.woff2",
-      "contentType": "font/woff2",
-      "csp": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
-      "sha256": "4b956befd0bafff93a36a8ef75b508fe5ce4400242d2cfe362a32bc3c4de8452"
-    },
-    {
-      "path": "/fonts/lora-latin.woff2",
-      "status": 200,
-      "url": "https://capy-prf-test.vercel.app/fonts/lora-latin.woff2",
-      "contentType": "font/woff2",
-      "csp": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
-      "sha256": "6b102ab35aa1f2b315788bb4853434ed1e52137603bf7a3da71a682276748d45"
-    },
-    {
-      "path": "/fonts/Vend-Sans-OFL.txt",
-      "status": 200,
-      "url": "https://capy-prf-test.vercel.app/fonts/Vend-Sans-OFL.txt",
-      "contentType": "text/plain; charset=utf-8",
-      "csp": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
-      "sha256": "b9511bc8cb3b35d82086718739f368efa50c520e084cc28192bd275b39fe5cc8"
-    },
-    {
-      "path": "/fonts/Lora-OFL.txt",
-      "status": 200,
-      "url": "https://capy-prf-test.vercel.app/fonts/Lora-OFL.txt",
-      "contentType": "text/plain; charset=utf-8",
-      "csp": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
-      "sha256": "1d9a970809ac804b582a6ce7f0ebc4e7fefcbfd7ff6299cad35ee656a21be716"
+      "sha256": "5a4ae4632005b78019f04afdb5d3760afff980259163d741a02ff253da519f58",
+      "contentType": "text/html; charset=utf-8"
     }
   ],
   "checks": {

@@ -1,27 +1,27 @@
-# Standalone PRF diagnostic deployment
+# Capy Passkey Lab deployment
 
 - Stable test URL: https://capy-prf-test.vercel.app/
 - Vercel project: `capy-prf-test`, independent of Keep.
 - Branch: `codex/standalone-prf-test`.
-- Deployed application source: `bbd03d693ba1e0f91870e59f3b611c0f6fe3b6fc`.
-- Deployment: `dpl_qBbWYMsnuwf8ck9G3djPWEnKVXfr`, `READY`.
+- Deployed application source: `6f94f25f59e6c9b528509c5bb7322d0dca7f29c0`.
+- Deployment: `dpl_eFpi6uBateNw5BoACWuskegq6dLc`, `READY`.
 - This test project's production target provides its public stable address. No Capy product deployment, existing alias, or DNS was changed.
 - Full verified application snapshot and asset SHA-256 values: `deployment.json`.
-- Private source: `https://github.com/cvince/capy-prf-test`.
-- Vercel Git link: `cvince/capy-prf-test` (repository ID `1446488784`), production branch `codex/standalone-prf-test`, project ID `prj_gLAwTlMfRD96TyH1MCzbLfsx7vKw`.
-- The blog restyle deployed through the Git integration; the exact source commit’s GitHub Vercel success status matches the live deployment ID. No duplicate CLI deployment was started.
+- Private source: `https://github.com/capysc/capy-prf-test`.
+- Vercel Git link: `capysc/capy-prf-test` (repository ID `1446488784`), production branch `codex/standalone-prf-test`, project ID `prj_gLAwTlMfRD96TyH1MCzbLfsx7vKw`.
+- The Keep styling and Capy Passkey Lab title deployed through the Git integration. Vercel records the exact application source SHA and READY deployment above; the stable URL serves byte-identical build assets. No duplicate CLI deployment was started.
 
 ## Verification
 
 Typecheck and build passed after restyling. The crypto implementation is unchanged; the existing five focused crypto tests with 27 assertions remain the prior verification evidence. HTTP verification confirmed the root, `/prf-test` alias, JavaScript, and stylesheet return 200 without authentication. The served JavaScript contains the requested Phone/Desktop/Check Passkey Equality labels, visible Test IDs, and explicit verification retry. Self-only script/style CSP and no application connections are retained.
 
-The stylesheet and bundled Vend Sans/Lora fonts were verified at the public URL; returned font bytes match the local assets. The neutral Phone/Desktop/Check Passkey Equality controls and explicit UV retry remain in the served JavaScript. No browser/UI tests or human passkey ceremonies were performed. Manual phone/desktop acceptance remains pending.
+The stylesheet was verified at the public URL and matches the built Keep kit styles byte for byte. No bundled or remote fonts are used. The neutral Phone/Desktop/Check Passkey Equality controls and explicit UV retry remain in the served JavaScript. No browser/UI tests or human passkey ceremonies were performed. Manual phone/desktop acceptance remains pending.
 
 ## Keep visual provenance
 
 The user selected Keep styling. The standalone app reuses `capysc/keep-app` at `f6765478b424c2aaffb28d6c11d0358849604310`, inspected read-only at `/private/tmp/capy-staging-desktop-transport-20261103`. References are `src/lib/ui/canonical/kit-tokens.css`, `kit-base.css`, and the native `Page`, `Button`, `Controls`, `Field`, and `MessageBox` kit components. Keep uses a system font stack, so no bundled or remote font is needed. The prior blog look and font assets have been removed. Test behavior and crypto source remain unchanged.
 
-This application correction is prepared locally; the deployment snapshot above records the preceding deployment until the new Git-triggered deployment is verified.
+The application correction is deployed and verified. The previous blog-styled deployment was `dpl_2dQfVJArHTmLM1i9xGLsrvcrL5gm` at `c8dc7a635bef662cef43a25d4ed0b8b72d59d62c`; it is superseded.
 
 ## Verification-policy experiment
 

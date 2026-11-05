@@ -32,4 +32,4 @@ The app uses the actual native `capysc/keep-app` kit at `f6765478b424c2aaffb28d6
 
 Keep's system font stack, measured column, light/dark tokens, glass controls, fields and message borders are reused. The standalone wrappers contain no Keep authentication or backend dependencies. No blog styling or font assets are used.
 
-Vercel project `capy-prf-test` deploys the `codex/standalone-prf-test` branch. The stable test address is `https://capy-prf-test.vercel.app/`. No `main` branch or Capy product deployment is involved.
+The private source repository is `https://github.com/capysc/capy-prf-test`. Vercel project `capy-prf-test` deploys the `codex/standalone-prf-test` branch. The stable test address is `https://capy-prf-test.vercel.app/`. No `main` branch or Capy product deployment is involved.
