@@ -786,3 +786,96 @@ details p { margin-top: var(--space-3); }
 
 .overall-pass { color: var(--ok-ink); }
 .overall-fail { color: var(--danger-ink); }
+
+/* Results and navigation share accessible blue/teal link colours. */
+:root {
+  --link-color: #1d4ed8;
+  --result-pass-ink: #087461;
+  --result-pass-fill: #ecfdf5;
+  --result-fail-ink: #b42318;
+  --result-fail-fill: #fff1f0;
+  --results-text: 0.875rem;
+  --results-measure: 84rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']):not(:has([data-kit-theme='light'])) {
+    --link-color: #5eead4;
+    --result-pass-ink: #6debd7;
+    --result-pass-fill: #12362e;
+    --result-fail-ink: #fda29b;
+    --result-fail-fill: #3b1919;
+  }
+}
+:root[data-theme='dark'],
+:root:has([data-kit-theme='dark']) {
+  --link-color: #5eead4;
+  --result-pass-ink: #6debd7;
+  --result-pass-fill: #12362e;
+  --result-fail-ink: #fda29b;
+  --result-fail-fill: #3b1919;
+}
+a { color: var(--link-color); text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
+a:hover { text-decoration-thickness: 2px; }
+.header-link { margin-left: auto; white-space: nowrap; font-weight: 600; }
+.header-link span { margin-left: var(--space-1); }
+.results-page { max-width: var(--results-measure); gap: var(--space-8); }
+.results-page header { padding-bottom: var(--space-6); border-bottom: 1px solid var(--line); }
+.results-intro { display: grid; gap: var(--space-4); max-width: var(--measure-wide); }
+.results-eyebrow { color: var(--faint); font-size: var(--results-text); font-weight: 600; letter-spacing: 0.08em; }
+.results-title { font-size: clamp(1.75rem, 4vw, var(--text-5xl)); line-height: var(--leading-tight); letter-spacing: -0.035em; }
+.results-lede { color: var(--faint); font-size: var(--text-lg); max-width: var(--measure); }
+.results-date { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2); font-size: var(--results-text); }
+.results-date time { font-weight: 600; }
+.date-zone { color: var(--faint); }
+.results-highlights { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
+.result-highlight { display: grid; align-content: start; gap: var(--space-2); padding: var(--space-5); border: 1px solid var(--line); border-radius: var(--radius); background: var(--foreground); }
+.highlight-label { font-size: var(--results-text); color: var(--faint); }
+.result-highlight strong { font-weight: 600; font-size: var(--text-lg); }
+.result-highlight p { font-size: var(--results-text); color: var(--faint); }
+.results-section { display: grid; gap: var(--space-4); min-width: 0; }
+.section-heading { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: var(--space-2); }
+.section-heading h2 { font-size: var(--text-xl); }
+.section-heading > span { font-size: var(--results-text); color: var(--faint); }
+.section-description { color: var(--faint); max-width: var(--measure-wide); }
+.table-scroll { overflow-x: auto; border: 1px solid var(--line-strong); border-radius: var(--radius); background: var(--foreground); }
+.results-page table { width: 100%; border-spacing: 0; font-size: var(--results-text); text-align: left; }
+.results-page caption { text-align: left; color: var(--faint); padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--line); }
+.results-page th, .results-page td { padding: var(--space-4); vertical-align: top; border-bottom: 1px solid var(--line); }
+.results-page thead th { background: var(--foreground-raised); font-weight: 600; border-bottom-color: var(--line-strong); }
+.results-page tbody th { font-weight: 600; }
+.results-page tbody tr:last-child > * { border-bottom: 0; }
+.results-page tbody tr:hover > * { background: var(--foreground-raised); }
+.comparison-table { min-width: 76rem; }
+.comparison-table th:first-child { min-width: 9rem; }
+.comparison-table td:nth-child(2), .comparison-table td:nth-child(3) { min-width: 10.75rem; }
+.comparison-table th:nth-child(4) { min-width: 9.5rem; }
+.comparison-table th:nth-child(7) { min-width: 7rem; }
+.cell-primary { display: block; font-weight: 500; }
+.cell-secondary, .column-detail { display: block; color: var(--faint); font-weight: 400; }
+.cell-secondary { margin-top: var(--space-1); }
+.column-detail { margin-top: var(--space-1); }
+.test-number { display: inline-block; font-size: var(--text-lg); font-variant-numeric: tabular-nums; text-decoration: none; scroll-margin-top: var(--space-6); }
+.test-number:hover { text-decoration: underline; }
+.test-reference { display: block; font-family: var(--font-mono); font-size: 0.6875rem; color: var(--faint); font-weight: 400; white-space: nowrap; margin-top: var(--space-2); }
+.key-cell { white-space: nowrap; }
+.implication-cell { min-width: 15rem; max-width: 21rem; }
+.verdict { display: inline-flex; align-items: center; gap: var(--space-1); border-radius: var(--radius); padding: 0.15em 0.6em; white-space: nowrap; font-weight: 600; }
+.verdict-pass { color: var(--result-pass-ink); background: var(--result-pass-fill); }
+.verdict-fail { color: var(--result-fail-ink); background: var(--result-fail-fill); }
+.verdict-expected { color: var(--faint); background: var(--foreground-sunken); }
+.matrix-table { min-width: 46rem; }
+.matrix-table th:not(:first-child), .matrix-table td { text-align: center; vertical-align: middle; }
+.results-note { color: var(--faint); font-size: var(--results-text); max-width: var(--measure-wide); }
+.results-note p + p { margin-top: var(--space-3); }
+.results-context { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+.results-context section { padding: var(--space-5) var(--space-5) 0 0; }
+.results-context section + section { border-left: 1px solid var(--line); padding-left: var(--space-5); }
+.results-context h3 { margin: 0 0 var(--space-3); font-size: var(--text-base); font-weight: 600; }
+.results-context p { color: var(--faint); font-size: var(--results-text); }
+@media (max-width: 52rem) {
+  .results-highlights, .results-context { grid-template-columns: 1fr; }
+  .results-context section { padding: var(--space-5) 0; }
+  .results-context section + section { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); }
+  .comparison-table th:first-child { position: sticky; left: 0; z-index: 1; background: var(--foreground); border-right: 1px solid var(--line); }
+  .comparison-table thead th:first-child { background: var(--foreground-raised); }
+}

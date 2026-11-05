@@ -4,6 +4,10 @@
   "outputDirectory": "dist",
   "rewrites": [
     {
+      "source": "/results",
+      "destination": "/results/index.html"
+    },
+    {
       "source": "/prf-test",
       "destination": "/index.html"
     }

@@ -34,6 +34,23 @@ Keep's system font stack, measured column, light/dark tokens, glass controls, fi
 
 The private source repository is `https://github.com/capysc/capy-prf-test`. Vercel project `capy-prf-test` deploys the `codex/standalone-prf-test` branch. The stable test address is `https://passkey-lab.capy.sc/`. No `main` branch or Capy product deployment is involved.
 
+## Published results
+
+`/results` contains the ten numbered manual comparisons, the four-case
+decryption matrix, requested verification policies, observed key relationships
+and interpretation limits. Latest results are dated **November 4, 2026**
+(Pacific), rather than using the visitor's clock. Only sanitized summaries and
+test IDs are published; no credential IDs or raw PRF outputs are included.
+
+The header's Results link opens in a separate tab to preserve an in-progress
+test's memory. Links are blue in light mode and teal in dark mode. The results
+page is generated as static HTML during the build, works without JavaScript,
+and uses the same stylesheet as the test. Tables scroll within the page on
+narrow screens. Update the immutable comparison data and date in
+`src/Results.tsx` when adding verified manual results. Provider/route labels
+remain user-reported, and QR and direct runs from different origins or
+credentials must not be presented as a controlled same-credential comparison.
+
 ## Compare verification policies on one device
 
 Create a disposable passkey on the phone with the intended provider, then encrypt using the default preferred approval. Choose **Check on this device**, then **Check with required verification**. This compares policies against the same passkey and ciphertext. Copy the report with **Copy results for chat**. **Check again** returns to that same packet so the default preferred check can also be run without re-enrollment.
