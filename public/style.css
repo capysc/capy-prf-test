@@ -814,8 +814,7 @@ details p { margin-top: var(--space-3); }
   --result-fail-ink: #fda29b;
   --result-fail-fill: #3b1919;
 }
-a { color: var(--link-color); text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
-a:hover { text-decoration-thickness: 2px; }
+a { color: var(--link-color); text-decoration: none; }
 .header-links { display: flex; align-items: center; gap: var(--space-4); margin-left: auto; }
 .header-link { white-space: nowrap; font-weight: 600; }
 .header-link span { margin-left: var(--space-1); }
@@ -824,9 +823,10 @@ a:hover { text-decoration-thickness: 2px; }
 .results-page { max-width: var(--results-measure); gap: var(--space-8); }
 .results-page header { padding-bottom: var(--space-6); border-bottom: 1px solid var(--line); }
 .results-section { display: grid; gap: var(--space-4); min-width: 0; }
+.section-divider { width: 100%; margin: 0; border: 0; border-top: 1px solid var(--line-strong); }
+.contribution-section { max-width: var(--measure-wide); }
 .section-heading { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: var(--space-2); }
 .section-heading h2 { font-size: var(--text-xl); }
-.section-heading > span { font-size: var(--results-text); color: var(--faint); }
 .section-description { color: var(--faint); max-width: var(--measure-wide); }
 .table-scroll { overflow-x: auto; border: 1px solid var(--line-strong); border-radius: var(--radius); background: var(--foreground); }
 .results-page table { width: 100%; border-spacing: 0; font-size: var(--text-sm); text-align: left; }
@@ -847,7 +847,6 @@ a:hover { text-decoration-thickness: 2px; }
 .cell-secondary { margin-top: var(--space-1); }
 .column-detail { margin-top: var(--space-1); }
 .test-number { display: inline-block; font-size: inherit; font-variant-numeric: tabular-nums; text-decoration: none; scroll-margin-top: var(--space-6); }
-.test-number:hover { text-decoration: underline; }
 .verification-required { color: var(--result-fail-ink); font-weight: 600; }
 .results-page code { font-size: inherit; }
 .key-cell { white-space: nowrap; }

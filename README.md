@@ -1,59 +1,103 @@
 # Passkey Lab
 
-A static, browser-only extraction of the disposable test from Keep revision `f6765478b424c2aaffb28d6c11d0358849604310`. No Keep dependency, sign-in, backend, storage, analytics, or environment secrets.
+An open-source experiment investigating whether the same passkey produces the
+same encryption keys across browsers, devices, password managers and access paths.
 
-## Run
+[Open the lab](https://passkey-lab.capy.sc/) · [View the results](https://passkey-lab.capy.sc/results) · [Contribute](#contributing)
 
-```
-bun install
-bun run typecheck
-bun test
-bun run build
-python3 -m http.server 4173 --directory dist
-```
+## Why this exists
 
-Open `http://localhost:4173` locally. Real phone/desktop testing needs the same deployed HTTPS address on both devices. The RP ID is the current hostname, so passkeys created on staging Keep cannot be reused on this app's separate domain.
+A passkey can sign you in successfully while its encryption features behave
+differently across platforms. Applications that use the WebAuthn PRF extension
+to protect encrypted data depend on the same credential and input producing
+the same key wherever that credential is used.
 
-## Test
+Passkey Lab makes that interoperability property observable. It compares
+phone-local access, desktop password-manager extensions and phone QR flows.
+The goal is reproducible evidence that helps browser and password-manager
+vendors find and fix incompatible behavior.
 
-Choose the current device role. The labels do not choose a browser, provider, or transport: use your planned password manager and either direct selection or native QR. Create a disposable passkey, then use a separate tap to obtain both PRF outputs and encrypt both messages. Copy the complete packet using its copy button, load it on the other device, compare test IDs, and check. Copy the combined results using their copy button.
+## What the experiment measures
 
-Each assertion requests exactly the same original input and domain-separated hashed input as the Keep diagnostic. Both outputs are normalized to exact 32-byte snapshots, with actual user verification required. Each ciphertext has its own IV. The consumer uses fresh native outputs for all four AES-GCM decryptions, never the copied source keys. No automatic extra-hash compensation or provider detection is applied.
+One approval evaluates two inputs: an original input and an extra-hashed
+version. Each returned key encrypts a separate copy of the same message.
+The receiving device obtains its own fresh keys and tries both against both
+encrypted copies, producing four authenticated decryption results.
 
-The default source and consumer assertions request `userVerification: preferred` and still reject a response without the actual UV bit. Enrollment separately requests `required`; this does not describe subsequent assertions. Both creator encryption and consumer checks offer explicit required-verification alternatives. After `USER_NOT_VERIFIED`, the alternative is labeled **Retry with required verification**. Each button directly starts one `get` request with the selected policy. Creator retry reuses its current enrolled credential; consumer retry preserves its packet and Test ID. A page refresh clears that in-memory state. This is an explicit additional experiment, never an automatic retry or changed default. Successful reports include creator/consumer requested policies and actual verification results; an unverified response produces no PRF or decryption report.
+This distinguishes matching keys from a relative input-hashing shift. It also
+records the requested verification policy and actual user verification.
+An assertion without actual verification is rejected before any PRF or
+decryption result is accepted.
 
-The reports intentionally include disposable PRF outputs for this experiment. Do not use real account or Transport passkeys. No passkey ceremonies are automated by the code's tests.
+The extra-hashed input is a diagnostic probe. The lab does not automatically
+adjust inputs by provider, compensate for mismatches or use copied source
+keys to make the receiving device appear successful.
 
-UI/browser tests are intentionally not used. Existing focused crypto tests are retained; typecheck and static build validate packaging. Manual device acceptance is separate.
+## Findings so far
 
-## Visual source
+Latest results: **November 4, 2026**.
 
-The app uses the actual native `capysc/keep-app` kit at `f6765478b424c2aaffb28d6c11d0358849604310`, inspected read-only at `/private/tmp/capy-staging-desktop-transport-20261103`. References: `src/lib/ui/canonical/kit-tokens.css`, `kit-base.css`, and the `Page`, `Button`, `Controls`, `Field`, and `MessageBox` components under `src/components/kit/`.
+| Provider | Direct paths | Phone QR paths |
+| --- | --- | --- |
+| 1Password | Safari ↔ Chrome extension passed in both directions. | Earlier runs showed a relative input-hashing shift in both directions. |
+| Apple Passwords | Both directions passed. | Both directions passed. |
+| Chrome Password Manager | Both directions passed with required verification on desktop. | An earlier unnumbered run reported a relative input-hashing shift. |
 
-Keep's system font stack, measured column, light/dark tokens, glass controls, fields and message borders are reused. The standalone wrappers contain no Keep authentication or backend dependencies. No blog styling or font assets are used.
+The numbered comparisons and full four-case matrices are on the
+[results page](https://passkey-lab.capy.sc/results).
 
-The private source repository is `https://github.com/capysc/capy-prf-test`. Vercel project `capy-prf-test` deploys the `codex/standalone-prf-test` branch. The stable test address is `https://passkey-lab.capy.sc/`. No `main` branch or Capy product deployment is involved.
+The direct 1Password results show that the observed failure is not universal
+to 1Password or cross-device PRF. Its QR/provider hand-off deserves investigation,
+but responsibility between 1Password, Apple's bridge and Chrome is unconfirmed.
+Historical QR runs and later direct runs used different origins and credentials;
+they are not a same-credential control isolating route alone.
 
-## Published results
+Verification failures are a separate finding. Some desktop Chrome Password
+Manager attempts under preferred verification lacked actual UV; explicit
+required attempts passed. Preferred permits an unverified response, so this
+alone does not establish a vendor bug. A later 1Password extension run used
+required without establishing that preferred had failed.
 
-`/results` contains the ten numbered manual comparisons, the four-case
-decryption matrix, requested verification policies, observed key relationships
-and interpretation limits. Latest results are dated **November 4, 2026**
-(Pacific), rather than using the visitor's clock. Only sanitized summaries and
-test numbers are published; no report IDs, credential IDs or raw PRF outputs
-are included. Both tables show creator and consumer for every numbered test.
+Provider and selection-route labels come from the tester's reported setup;
+the JSON does not attest which provider interface or transport was used.
+These findings describe tested combinations, not every installation.
 
-The header's Results link opens in a separate tab to preserve an in-progress
-test's memory. Links are blue in light mode and teal in dark mode. The results
-page is generated as static HTML during the build, works without JavaScript,
-and uses the same stylesheet as the test. Tables scroll within the page on
-narrow screens. Update the immutable comparison data and date in
-`src/Results.tsx` when adding verified manual results. Provider/route labels
-remain user-reported, and QR and direct runs from different origins or
-credentials must not be presented as a controlled same-credential comparison.
+## Contributing
 
-## Compare verification policies on one device
+Help broaden the evidence or make the experiment easier to understand and
+reproduce. Share a sanitized finding in a
+[GitHub issue](https://github.com/capysc/capy-prf-test/issues/new), or open a pull
+request with a correction, a new comparison or an implementation improvement.
 
-Create a disposable passkey on the phone with the intended provider, then encrypt using the default preferred approval. Choose **Check on this device**, then **Check with required verification**. This compares policies against the same passkey and ciphertext. Copy the report with **Copy results for chat**. **Check again** returns to that same packet so the default preferred check can also be run without re-enrollment.
+A useful result includes:
 
-This is a separate experiment from cross-device QR testing. A currently working provider may not reproduce a historical failure. Keep's historical 1Password fix also changed per-credential `evalByCredential` requests to plain `prf.eval`; this lab already uses plain `eval`, so changing its verification policy does not reproduce the entire old request.
+- Date and test origin, plus device, OS, browser and password-manager versions.
+- Creator and consumer paths: local, extension or QR, including the native
+  chooser's provider-selection route.
+- Requested verification policies and actual verification on both devices.
+- All four decryption verdicts, or the exact native popup/app error if the
+  experiment stopped before comparison.
+- Whether the comparison reused a credential and packet or started a separate
+  run. Keep observations separate from explanations of their cause.
+
+**Do not post complete copied packets or reports.** They contain disposable
+PRF outputs and credential identifiers. Share only sanitized metadata and
+verdicts, never real-account credentials or encryption material.
+
+For code contributions, preserve human-controlled native approval and actual-UV
+checks. Comparison data and dates live in `src/Results.tsx`. Use the existing
+style tokens and immutable TypeScript values. Run `bun run typecheck`,
+`bun test` and `bun run build` before submitting. Automated checks cover
+synthetic crypto; native provider behavior is verified manually, without
+browser/UI tests.
+
+## Privacy and scope
+
+The lab runs in the browser without sign-in, a backend, analytics or automatic
+result submission. Use disposable passkeys. In-progress data stays in page
+memory; refreshing clears it. Copying and sharing a report is an explicit
+action by the tester.
+
+This is a diagnostic experiment, not a passkey manager or an application
+encryption fallback. Its reference contract is the
+[WebAuthn PRF specification](https://www.w3.org/TR/webauthn-3/#prf-extension).

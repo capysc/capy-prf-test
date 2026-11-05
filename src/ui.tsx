@@ -21,6 +21,10 @@ export function Controls({ children }: Readonly<{ children: ReactNode }>) {
   return <div className="controls">{children}</div>;
 }
 
+export function Hr() {
+  return <hr className="section-divider" />;
+}
+
 type ButtonProps = Readonly<ComponentProps<'button'> & { busy?: boolean; variant?: string }>;
 export function Button({ busy = false, disabled, variant, children, ...props }: ButtonProps) {
   return <button {...props} className={`button ${variant === 'secondary' ? 'secondary' : 'primary'}`} disabled={disabled || busy} aria-busy={busy}>{children}</button>;

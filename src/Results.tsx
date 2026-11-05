@@ -1,4 +1,4 @@
-import { Page } from './ui';
+import { Page, Hr } from './ui';
 
 export const LATEST_RESULTS_DATE = '2026-11-04';
 const alignedCases = [true, false, false, true] as const;
@@ -66,7 +66,7 @@ function Policy({ value }: Readonly<{ value: VerificationPolicy }>) {
 export function ResultsPage() {
   return <Page title="Passkey Lab" results>
     <section className="results-section" aria-labelledby="comparison-heading">
-      <div className="section-heading"><h2 id="comparison-heading">The full comparison</h2><span>10 completed tests</span></div>
+      <div className="section-heading"><h2 id="comparison-heading">The full comparison</h2></div>
       <p className="section-description">Direct selection and QR are different paths. “Pass” means the consumer’s original-input key opens the creator’s original-input ciphertext.</p>
       <div className="table-scroll" role="region" aria-labelledby="comparison-heading" tabIndex={0}>
         <table className="comparison-table">
@@ -85,8 +85,10 @@ export function ResultsPage() {
       <p className="results-note"><strong>Vendor ownership is unconfirmed.</strong> The QR and direct runs used different origins and credentials. The investigation should check the raw-versus-already-hashed hand-off: <a href="https://github.com/1Password/passkey-rs/blob/1606717bd9888b629905d435bb876b24b1aaddb5/passkey-types/src/webauthn/extensions/mod.rs#L36">1Password’s Apple input contract</a> and <a href="https://chromium.googlesource.com/chromium/src/+/main/ios/chrome/credential_provider_extension/passkey_util.mm#37">Chromium’s iOS adapter</a> identify relevant public boundaries, not proof of the installed bug’s owner.</p>
     </section>
 
+    <Hr />
+
     <section className="results-section" aria-labelledby="matrix-heading">
-      <div className="section-heading"><h2 id="matrix-heading">All four decryption cases</h2><span>Fresh consumer keys</span></div>
+      <div className="section-heading"><h2 id="matrix-heading">All four decryption cases</h2></div>
       <p className="section-description">Each creator encrypts independently with its original-input and extra-hashed-input keys. The consumer tries both fresh keys against both ciphertexts.</p>
       <div className="table-scroll" role="region" aria-labelledby="matrix-heading" tabIndex={0}>
         <table className="matrix-table">
@@ -100,6 +102,17 @@ export function ResultsPage() {
         </table>
       </div>
       <p className="results-note">The cross-input failures in Tests 3–10 are expected: different inputs produce different keys. Tests 1–2 instead have opposite off-diagonal successes, supporting a relative input-hashing shift.</p>
+    </section>
+
+    <section className="results-section contribution-section" aria-labelledby="contribution-heading">
+      <div className="section-heading"><h2 id="contribution-heading">Contributing</h2></div>
+      <p>Help broaden the evidence with another browser, password manager or access path, or contribute a correction or code improvement.</p>
+      <ul>
+        <li>Include the date, origin, device and software versions, creator/consumer paths and native provider-selection route.</li>
+        <li>Record requested verification and actual UV on both devices, plus all four decryption verdicts. Report native popups and app errors separately when no comparison completed.</li>
+        <li>Share a sanitized summary. Copied packets and reports contain disposable PRF outputs and credential IDs; leave those out of public submissions.</li>
+      </ul>
+      <p><a href="https://github.com/capysc/capy-prf-test/issues/new" target="_blank" rel="noopener">Share a result on GitHub</a> or read the <a href="https://github.com/capysc/capy-prf-test#contributing" target="_blank" rel="noopener">contribution guide</a>. Keep observations and suspected causes distinct.</p>
     </section>
 
   </Page>;
