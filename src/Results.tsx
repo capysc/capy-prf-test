@@ -75,6 +75,7 @@ export function ResultsPage() {
       <p className="section-description">Each row is one setup we tested. The Creator encrypted a message; the Consumer tried to open it using the same passkey. The result shows whether that setup worked out of the box, needed changes or failed.</p>
       <div className="results-note">
         <p><strong>Reading the keys</strong></p>
+        <p>This notation shows how inconsistent hashing can produce different encryption keys.</p>
         <dl className="key-legend">
           <dt><code>x</code></dt><dd>The original input given to the passkey.</dd>
           <dt><code>D(x)</code></dt><dd>A hashed version of that input, used for comparison.</dd>
