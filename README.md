@@ -1,4 +1,4 @@
-# Standalone passkey PRF test
+# Capy Passkey Lab
 
 A static, browser-only extraction of the disposable test from Keep revision `f6765478b424c2aaffb28d6c11d0358849604310`. No Keep dependency, sign-in, backend, storage, analytics, or environment secrets.
 
@@ -28,8 +28,8 @@ UI/browser tests are intentionally not used. Existing focused crypto tests are r
 
 ## Visual source
 
-The design reuses the actual `cvince/blog` repository at `b4e953d34938438f3fdb1acd3aa0de7edf6d4e9c`, inspected read-only at `/Users/vince/Dev/blog`. References: `app/globals.css`, `app/layout.tsx`, `app/markdown.css`, and `app/[slug]/post-nav.tsx`.
+The app uses the actual native `capysc/keep-app` kit at `f6765478b424c2aaffb28d6c11d0358849604310`, inspected read-only at `/private/tmp/capy-staging-desktop-transport-20261103`. References: `src/lib/ui/canonical/kit-tokens.css`, `kit-base.css`, and the `Page`, `Button`, `Controls`, `Field`, and `MessageBox` components under `src/components/kit/`.
 
-Vend Sans is used for headings and controls, Lora for prose, with white/black backgrounds, neutral rules, a narrow reading column, square outlined controls and quiet text links. The matching Latin font subsets are bundled locally from the blog's built assets; their official Google Fonts OFL notices are included. No blog analytics, app code, or secrets were copied.
+Keep's system font stack, measured column, light/dark tokens, glass controls, fields and message borders are reused. The standalone wrappers contain no Keep authentication or backend dependencies. No blog styling or font assets are used.
 
-The app's private source repository is `https://github.com/cvince/capy-prf-test`. Vercel project `capy-prf-test` is connected to its `codex/standalone-prf-test` branch; pushes on that branch deploy the standalone app. No `main` branch or Capy product deployment is involved.
+Vercel project `capy-prf-test` deploys the `codex/standalone-prf-test` branch. The stable test address is `https://capy-prf-test.vercel.app/`. No `main` branch or Capy product deployment is involved.

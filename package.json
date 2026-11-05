@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "bun build src/main.tsx --outdir dist --entry-naming app.js --target browser --minify && cp public/index.html public/style.css dist/ && mkdir -p dist/fonts && cp public/fonts/* dist/fonts/",
+    "build": "bun build src/main.tsx --outdir dist --entry-naming app.js --target browser --minify && cp public/index.html public/style.css dist/",
     "typecheck": "tsc --noEmit",
     "test": "bun test tests/"
   },

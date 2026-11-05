@@ -1,13 +1,7 @@
 import type { ComponentProps, ReactNode } from 'react';
 
 export function Page({ title, children }: Readonly<{ title: string; lockup?: string; children: ReactNode }>) {
-  return <>
-    <nav className="site-nav" aria-label="Site">
-      <a href="https://www.vincentchan.vc" target="_blank" rel="noreferrer">vincent chan.</a>
-      <span>Browser experiment</span>
-    </nav>
-    <main><header><h1>{title}</h1></header>{children}</main>
-  </>;
+  return <main><header><h1>{title}</h1></header>{children}</main>;
 }
 
 export function Controls({ children }: Readonly<{ children: ReactNode }>) {
@@ -16,7 +10,7 @@ export function Controls({ children }: Readonly<{ children: ReactNode }>) {
 
 type ButtonProps = Readonly<ComponentProps<'button'> & { busy?: boolean; variant?: string }>;
 export function Button({ busy = false, disabled, variant, children, ...props }: ButtonProps) {
-  return <button {...props} className={variant === 'secondary' ? 'secondary' : undefined} disabled={disabled || busy} aria-busy={busy}>{children}</button>;
+  return <button {...props} className={`button ${variant === 'secondary' ? 'secondary' : 'primary'}`} disabled={disabled || busy} aria-busy={busy}>{children}</button>;
 }
 
 type FieldProps = Readonly<{

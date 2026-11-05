@@ -17,9 +17,11 @@ Typecheck and build passed after restyling. The crypto implementation is unchang
 
 The stylesheet and bundled Vend Sans/Lora fonts were verified at the public URL; returned font bytes match the local assets. The neutral Phone/Desktop/Check Passkey Equality controls and explicit UV retry remain in the served JavaScript. No browser/UI tests or human passkey ceremonies were performed. Manual phone/desktop acceptance remains pending.
 
-## Blog visual provenance
+## Keep visual provenance
 
-The app reuses `cvince/blog` at `b4e953d34938438f3fdb1acd3aa0de7edf6d4e9c`, inspected read-only at `/Users/vince/Dev/blog`. Visual references are `app/globals.css`, `app/layout.tsx`, `app/markdown.css`, and `app/[slug]/post-nav.tsx`: Vend Sans controls/headings, Lora prose, white/black backgrounds, neutral rules, narrow reading column and square outlined controls. Fonts are bundled locally with their OFL notices; no analytics or blog behavior was copied. The blog checkout was not modified.
+The user selected Keep styling. The standalone app reuses `capysc/keep-app` at `f6765478b424c2aaffb28d6c11d0358849604310`, inspected read-only at `/private/tmp/capy-staging-desktop-transport-20261103`. References are `src/lib/ui/canonical/kit-tokens.css`, `kit-base.css`, and the native `Page`, `Button`, `Controls`, `Field`, and `MessageBox` kit components. Keep uses a system font stack, so no bundled or remote font is needed. The prior blog look and font assets have been removed. Test behavior and crypto source remain unchanged.
+
+This application correction is prepared locally; the deployment snapshot above records the preceding deployment until the new Git-triggered deployment is verified.
 
 ## Verification-policy experiment
 
