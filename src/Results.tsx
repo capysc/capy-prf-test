@@ -97,13 +97,5 @@ export function ResultsPage() {
       <p className="results-note">The cross-input failures in Tests 3–10 are expected: different inputs produce different keys. Tests 1–2 instead have opposite off-diagonal successes, supporting a relative input-hashing shift.</p>
     </section>
 
-    <section className="results-section" aria-labelledby="context-heading">
-      <div className="section-heading"><h2 id="context-heading">Keep these findings separate</h2></div>
-      <div className="results-context">
-        <section><h3>Route and origin matter</h3><p>1Password worked directly in both directions; earlier QR runs produced different keys. Tests 1–6 used <code>staging-keep.capy.sc</code>. Tests 7–10 used <code>passkey-lab.capy.sc</code> with fresh credentials. This is not a same-credential direct-versus-QR control. Provider and route labels are human-reported, not attested by the JSON.</p></section>
-        <section><h3>Two additional observations</h3><p>An earlier unnumbered Chrome Password Manager QR test showed the same relative hashing shift. Separately, Safari’s initial “Use Passkey” route showed “Unable to use passkey,” while “Try other option → 1Password” succeeded under the same preferred request. That native chooser issue has no completed PRF matrix; its cause remains unresolved.</p></section>
-        <section><h3>What the proposed fix addresses</h3><p>Candidate-key opening and additional wrapping of the same custody material are proposed for the measured QR mismatch. No hash compensation is needed for the successful direct paths. These experiments do not justify a blanket extra hash, a global verification-policy change or accepting an assertion without actual UV. Product validation remains separate.</p></section>
-      </div>
-    </section>
   </Page>;
 }

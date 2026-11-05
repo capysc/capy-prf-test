@@ -794,7 +794,7 @@ details p { margin-top: var(--space-3); }
   --result-pass-fill: #ecfdf5;
   --result-fail-ink: #b42318;
   --result-fail-fill: #fff1f0;
-  --results-text: 0.875rem;
+  --results-text: var(--text-base);
   --results-measure: 84rem;
 }
 @media (prefers-color-scheme: dark) {
@@ -842,9 +842,10 @@ a:hover { text-decoration-thickness: 2px; }
 .cell-secondary, .column-detail { display: block; color: var(--faint); font-weight: 400; }
 .cell-secondary { margin-top: var(--space-1); }
 .column-detail { margin-top: var(--space-1); }
-.test-number { display: inline-block; font-size: var(--text-lg); font-variant-numeric: tabular-nums; text-decoration: none; scroll-margin-top: var(--space-6); }
+.test-number { display: inline-block; font-size: inherit; font-variant-numeric: tabular-nums; text-decoration: none; scroll-margin-top: var(--space-6); }
 .test-number:hover { text-decoration: underline; }
-.test-reference { display: block; font-family: var(--font-mono); font-size: 0.6875rem; color: var(--faint); font-weight: 400; white-space: nowrap; margin-top: var(--space-2); }
+.test-reference { display: block; font-family: var(--font-mono); font-size: inherit; color: var(--faint); font-weight: 400; white-space: nowrap; margin-top: var(--space-2); }
+.results-page code { font-size: inherit; }
 .key-cell { white-space: nowrap; }
 .implication-cell { min-width: 15rem; max-width: 21rem; }
 .verdict { display: inline-flex; align-items: center; gap: var(--space-1); border-radius: var(--radius); padding: 0.15em 0.6em; white-space: nowrap; font-weight: 600; }
@@ -855,15 +856,7 @@ a:hover { text-decoration-thickness: 2px; }
 .matrix-table th:not(:first-child), .matrix-table td { text-align: center; vertical-align: middle; }
 .results-note { color: var(--faint); font-size: var(--results-text); max-width: var(--measure-wide); }
 .results-note p + p { margin-top: var(--space-3); }
-.results-context { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); }
-.results-context section { padding: var(--space-5) var(--space-5) 0 0; }
-.results-context section + section { border-left: 1px solid var(--line); padding-left: var(--space-5); }
-.results-context h3 { margin: 0 0 var(--space-3); font-size: var(--text-base); font-weight: 600; }
-.results-context p { color: var(--faint); font-size: var(--results-text); }
 @media (max-width: 52rem) {
-  .results-context { grid-template-columns: 1fr; }
-  .results-context section { padding: var(--space-5) 0; }
-  .results-context section + section { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); }
   .comparison-table th:first-child { position: sticky; left: 0; z-index: 1; background: var(--foreground); border-right: 1px solid var(--line); }
   .comparison-table thead th:first-child { background: var(--foreground-raised); }
 }
