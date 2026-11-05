@@ -854,6 +854,7 @@ a { color: var(--link-color); text-decoration: none; }
 .verdict { display: inline-flex; align-items: center; gap: var(--space-1); border-radius: var(--radius); padding: 0.15em 0.6em; white-space: nowrap; font-weight: 600; }
 .verdict-pass { color: var(--result-pass-ink); background: var(--result-pass-fill); }
 .verdict-fail { color: var(--result-fail-ink); background: var(--result-fail-fill); }
+.verdict-changes { color: var(--warn-ink); background: var(--warn-bg); }
 .verdict-expected { color: var(--faint); background: var(--foreground-sunken); }
 .matrix-table { min-width: 66rem; }
 .matrix-table th:nth-child(n+4), .matrix-table td:nth-child(n+4) { text-align: center; vertical-align: middle; }

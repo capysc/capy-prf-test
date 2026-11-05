@@ -46,13 +46,19 @@ const comparisons: readonly Comparison[] = [
     vendorAction: '1Password: no PRF fix indicated for the direct extension path; the observed mismatch is on the earlier QR path.' },
   { number: 10, decryptionCases: alignedCases, creator: ['Desktop Chrome · direct', '1Password extension'], consumer: ['iPhone Safari', '1Password'],
     verification: ['Required', 'Preferred'], creatorKey: 'P(x)', consumerKey: 'P(x)', passes: true,
-    vendorAction: '1Password: no PRF fix indicated for the reverse direct extension path. This report does not establish that preferred failed.' },
+    vendorAction: '1Password: establish preferred-verification compatibility for this creator flow. This run used required and does not prove preferred fails; no PRF mismatch was observed.' },
 ];
 
 function Verdict({ passes, expected = false }: Readonly<{ passes: boolean; expected?: boolean }>) {
   return <span className={`verdict ${passes ? 'verdict-pass' : expected ? 'verdict-expected' : 'verdict-fail'}`}>
     <span aria-hidden="true">{passes ? '✓' : '−'}</span> {passes ? 'Pass' : 'Fail'}
   </span>;
+}
+
+function Outcome({ test }: Readonly<{ test: Comparison }>) {
+  return test.passes && test.verification.includes('Required')
+    ? <span className="verdict verdict-changes"><span aria-hidden="true">!</span> Needs changes</span>
+    : <Verdict passes={test.passes} />;
 }
 
 function Path({ value }: Readonly<{ value: readonly [string, string] }>) {
@@ -67,17 +73,17 @@ export function ResultsPage() {
   return <Page title="Passkey Lab" results>
     <section className="results-section" aria-labelledby="comparison-heading">
       <div className="section-heading"><h2 id="comparison-heading">The full comparison</h2></div>
-      <p className="section-description">Direct selection and QR are different paths. “Pass” means the consumer’s original-input key opens the creator’s original-input ciphertext.</p>
+      <p className="section-description">Direct selection and QR are different paths. “Pass” means original-input decryption worked with preferred verification. “Needs changes” means decryption worked, but the run used required verification.</p>
       <div className="table-scroll" role="region" aria-labelledby="comparison-heading" tabIndex={0}>
         <table className="comparison-table">
           <caption>Latest results: <time dateTime={LATEST_RESULTS_DATE}>November 4, 2026</time> (Pacific).</caption>
-          <thead><tr><th scope="col">Test</th><th scope="col">Creator</th><th scope="col">Consumer</th><th scope="col">Requested verification<br /><span className="column-detail">Creator → Consumer</span></th><th scope="col">Creator key</th><th scope="col">Consumer key</th><th scope="col">Original decryption</th><th scope="col">Vendor follow-up / proposed fix</th></tr></thead>
+          <thead><tr><th scope="col">Test</th><th scope="col">Creator</th><th scope="col">Consumer</th><th scope="col">Requested verification<br /><span className="column-detail">Creator → Consumer</span></th><th scope="col">Creator key</th><th scope="col">Consumer key</th><th scope="col">Outcome</th><th scope="col">Vendor follow-up / proposed fix</th></tr></thead>
           <tbody>{comparisons.map((test) => <tr key={test.number}>
             <th scope="row"><a href={`#test-${test.number}`} id={`test-${test.number}`} className="test-number">{String(test.number).padStart(2, '0')}</a></th>
             <td><Path value={test.creator} /></td><td><Path value={test.consumer} /></td>
             <td className="verification-cell"><Policy value={test.verification[0]} /><span className="cell-secondary">→ <Policy value={test.verification[1]} /></span></td>
             <td className="key-cell"><code>{test.creatorKey}</code></td><td className="key-cell"><code>{test.consumerKey}</code></td>
-            <td><Verdict passes={test.passes} /></td><td className="vendor-action-cell">{test.vendorAction}</td>
+            <td><Outcome test={test} /></td><td className="vendor-action-cell">{test.vendorAction}</td>
           </tr>)}</tbody>
         </table>
       </div>

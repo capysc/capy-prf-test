@@ -40,10 +40,10 @@ Latest results: **November 4, 2026**.
 | Provider / path | Finding |
 | --- | --- |
 | 1Password · Safari ↔ Chrome QR | Original-input keys differed in both directions; cross-input decryption exposed a relative input-hashing shift. |
-| 1Password · Safari ↔ Chrome extension directly | Keys matched and decryption passed in both directions. |
+| 1Password · Safari ↔ Chrome extension directly | Phone → extension passed under preferred. The reverse run needs changes: it used required, although keys matched and decryption succeeded. |
 | Apple Passwords · Safari ↔ Chrome QR | Keys matched and decryption passed in both directions. |
 | Apple Passwords · Safari ↔ desktop Chrome directly | Keys matched and decryption passed in both directions. |
-| Chrome Password Manager · phone Chrome ↔ desktop Chrome directly | Keys matched and decryption passed in both directions with required verification on desktop; earlier preferred attempts lacked actual UV. |
+| Chrome Password Manager · phone Chrome ↔ desktop Chrome directly | Needs changes: desktop used required verification in both directions. Keys matched and decryption succeeded; earlier preferred attempts lacked actual UV. |
 | Chrome Password Manager · phone → Chrome QR | An earlier unnumbered run reported a relative input-hashing shift; no complete numbered matrix was supplied for this path. |
 
 [Full results and four-case decryption matrices](https://passkey-lab.capy.sc/results)
