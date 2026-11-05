@@ -70,7 +70,7 @@ function Policy({ value }: Readonly<{ value: VerificationPolicy }>) {
 export function ResultsPage() {
   return <Page title="Passkey Lab" results>
     <section className="results-section" aria-label="Passkey encryption comparisons">
-      <p className="section-description">This table shows whether data encrypted with a passkey can still be unlocked when that same passkey is used on another device, in another browser or through a phone QR flow.</p>
+      <p className="section-description">The results table below shows whether data encrypted with a passkey can still be unlocked when that same passkey is used on another device, in another browser or through a phone QR flow.</p>
       <p className="section-description">To unlock the same encrypted data across devices, the passkey must produce the same encryption key on each device. If the browser or password manager returns a different encryption key, the data stays locked on that device.</p>
       <p className="section-description">Each row is one setup we tested. The Creator encrypted a message; the Consumer tried to open it using the same passkey. The result shows whether that setup worked out of the box, needed changes or failed.</p>
       <div className="results-note">
