@@ -17,6 +17,7 @@ export function Page({ title, children, results = false, footer }: Readonly<{ ti
   </main>
     <footer className={results ? 'results-footer' : undefined}>
       {footer}
+      <hr className="section-divider" />
       <nav className="footer-links" aria-label="Capy links">
         <a href="https://capy.sc" target="_blank" rel="noopener">capy.sc</a>
         <a href="https://x.com/capythoughts" target="_blank" rel="noopener">Twitter</a>

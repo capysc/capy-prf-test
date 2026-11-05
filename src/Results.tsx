@@ -69,8 +69,7 @@ function Policy({ value }: Readonly<{ value: VerificationPolicy }>) {
 
 export function ResultsPage() {
   return <Page title="Passkey Lab" results>
-    <section className="results-section" aria-labelledby="comparison-heading">
-      <div className="section-heading"><h2 id="comparison-heading">The full comparison</h2></div>
+    <section className="results-section" aria-label="Passkey encryption comparisons">
       <p className="section-description">This table shows whether data encrypted with a passkey can still be unlocked when that same passkey is used on another device, in another browser or through a phone QR flow.</p>
       <p className="section-description">For apps that use passkeys to protect encrypted data, a successful sign-in is not enough. If the browser or password manager returns a different encryption key, the data stays locked on that device.</p>
       <p className="section-description">Each row is one setup we tested. The Creator encrypted a message; the Consumer tried to open it using the same passkey. The result shows whether that setup worked out of the box, needed changes or failed.</p>
@@ -85,7 +84,7 @@ export function ResultsPage() {
         <p><strong>In simpler terms:</strong> In the <code>P(D(x))</code> case, the tested 1Password QR flow behaves as though the input is hashed one extra time compared with local Safari. This produces a different encryption key, preventing data encrypted through one path from opening through the other.</p>
       </div>
       <p className="section-description">“Pass” means decryption worked out of the box. “Needs changes” means decryption worked after additional configuration.</p>
-      <div className="table-scroll" role="region" aria-labelledby="comparison-heading" tabIndex={0}>
+      <div className="table-scroll" role="region" aria-label="Passkey encryption comparisons" tabIndex={0}>
         <table className="comparison-table">
           <caption>Latest results: <time dateTime={LATEST_RESULTS_DATE}>November 4, 2026</time> (Pacific).</caption>
           <thead><tr><th scope="col">Test</th><th scope="col">Creator</th><th scope="col">Consumer</th><th scope="col">Requested verification<br /><span className="column-detail">Creator → Consumer</span></th><th scope="col">Creator key</th><th scope="col">Consumer key</th><th scope="col">Outcome</th><th scope="col">Vendor follow-up / proposed fix</th></tr></thead>
@@ -100,6 +99,8 @@ export function ResultsPage() {
       </div>
       <p className="results-note"><strong>Who needs to fix this?</strong> It is not yet clear whether the fault is in 1Password, Apple’s passkey support or Chrome. The QR and direct-extension tests used different websites and passkeys. <a href="https://github.com/1Password/passkey-rs/blob/1606717bd9888b629905d435bb876b24b1aaddb5/passkey-types/src/webauthn/extensions/mod.rs#L36">1Password’s handling of Apple’s inputs</a> and <a href="https://chromium.googlesource.com/chromium/src/+/main/ios/chrome/credential_provider_extension/passkey_util.mm#37">Chrome’s iOS code</a> are places to investigate; they do not prove which vendor caused the mismatch.</p>
     </section>
+
+    <hr className="section-divider" />
 
     <section className="results-section contribution-section" aria-labelledby="contribution-heading">
       <div className="section-heading"><h2 id="contribution-heading">Contributing</h2></div>
