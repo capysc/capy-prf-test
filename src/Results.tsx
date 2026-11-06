@@ -99,6 +99,17 @@ export function ResultsPage() {
           </tr>)}</tbody>
         </table>
       </div>
+      <div className="table-scroll" role="region" aria-label="Verification settings" tabIndex={0}>
+        <table>
+          <caption>Verification settings</caption>
+          <thead><tr><th scope="col">Device / password manager</th><th scope="col"><Policy value="Preferred" /></th><th scope="col"><Policy value="Required" /></th></tr></thead>
+          <tbody>
+            <tr><th scope="row">1Password on iOS · original tests</th><td>Returned an encryption key and confirmed identity verification with plain PRF evaluation.</td><td>The PRF request failed.</td></tr>
+            <tr><th scope="row">Chrome Password Manager on desktop Chrome · Tests 7–8</th><td>Did not report identity verification. The test stopped before reading encryption keys.</td><td>Reported identity verification. Keys matched across devices and decryption succeeded.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p className="results-note">The original 1Password iOS finding predates the numbered comparisons. Its working request changed both the verification setting to <code>"preferred"</code> and the PRF request to plain evaluation; the two changes were not isolated in that fix.</p>
       <p className="results-note"><strong>Who needs to fix this?</strong> It is not yet clear whether the fault is in 1Password, Apple’s passkey support or Chrome. The QR and direct-extension tests used different websites and passkeys. <a href="https://github.com/1Password/passkey-rs/blob/1606717bd9888b629905d435bb876b24b1aaddb5/passkey-types/src/webauthn/extensions/mod.rs#L36">1Password’s handling of Apple’s inputs</a> and <a href="https://chromium.googlesource.com/chromium/src/+/main/ios/chrome/credential_provider_extension/passkey_util.mm#37">Chrome’s iOS code</a> are places to investigate; they do not prove which vendor caused the mismatch.</p>
     </section>
 

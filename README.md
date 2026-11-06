@@ -39,10 +39,10 @@ Latest results: **November 4, 2026**.
 
 | Provider / path | Finding |
 | --- | --- |
+| 1Password · iOS verification | In the original iOS tests, required verification failed to retrieve the passkey’s encryption key. Preferred with plain PRF evaluation worked and confirmed identity verification. This earlier finding is separate from the numbered comparisons. |
 | 1Password · Safari ↔ Chrome QR | The routes returned different keys in both directions. QR behaved as though the input had been hashed an extra time compared with Safari. |
 | 1Password · Safari ↔ Chrome extension directly | Phone → extension passed under preferred. The reverse run needs changes: it used required, although keys matched and decryption succeeded. |
-| Apple Passwords · Safari ↔ Chrome QR | Keys matched and decryption passed in both directions. |
-| Apple Passwords · Safari ↔ desktop Chrome directly | Keys matched and decryption passed in both directions. |
+| Apple Passwords · Safari ↔ Chrome, QR and direct | Keys matched and decryption passed in both directions for both connection methods. |
 | Chrome Password Manager · phone Chrome ↔ desktop Chrome directly | Needs changes: desktop used required verification in both directions. Keys matched and decryption succeeded; earlier default approvals did not report identity verification. |
 | Chrome Password Manager · phone → Chrome QR | An earlier unnumbered test reported a similar key mismatch. It did not include a complete set of comparison results. |
 
