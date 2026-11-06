@@ -85,3 +85,7 @@ action by the tester.
 This is a diagnostic experiment, not a passkey manager or an application
 encryption fallback. Its reference contract is the
 [WebAuthn PRF specification](https://www.w3.org/TR/webauthn-3/#prf-extension).
+
+## License
+
+Licensed under the [MIT License](LICENSE).
