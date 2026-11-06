@@ -72,7 +72,7 @@ export function ResultsPage() {
     <section className="results-section" aria-label="Passkey encryption comparisons">
       <p className="section-description">The results table below shows two problems that can stop the same passkey from unlocking encrypted data across devices, browsers and connection methods: different encryption keys, and inconsistent identity verification.</p>
       <p className="section-description">In the first problem, using 1Password through local Safari and through Chrome’s phone QR flow produced different encryption keys, despite using the same passkey and input.</p>
-      <p className="section-description">In the second problem, desktop runs with <code>userVerification: "preferred"</code> did not report identity verification, so the test stopped before reading PRF outputs or comparing keys across devices. Runs using <code>"required"</code> reported verification and completed the comparison.</p>
+      <p className="section-description">In the second problem, some desktop Chrome Password Manager runs with <code>userVerification: "preferred"</code> did not report identity verification, so the test stopped before reading PRF outputs or comparing keys across devices. Runs using <code>"required"</code> reported verification and completed the comparison.</p>
       <p className="section-description">Each row is one setup we tested. The Creator encrypted a message; the Consumer tried to open it using the same passkey. The result shows whether that setup worked out of the box, needed changes or failed.</p>
       <div className="results-note">
         <p><strong>Reading the keys</strong></p>
