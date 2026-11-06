@@ -70,7 +70,7 @@ function Policy({ value }: Readonly<{ value: VerificationPolicy }>) {
 export function ResultsPage() {
   return <Page title="Passkey Lab" results>
     <section className="results-section" aria-label="Passkey encryption comparisons">
-      <p className="section-description">The results table below shows two problems that can stop the same passkey from unlocking encrypted data across devices, browsers and connection methods: different encryption keys, and inconsistent identity verification. “Preferred” asks the browser to verify the person if possible; “required” makes that verification mandatory.</p>
+      <p className="section-description">The results table below shows two problems that can stop the same passkey from unlocking encrypted data across devices, browsers and connection methods: different encryption keys, and inconsistent identity verification.</p>
       <p className="section-description">In the first problem, one route returns a different key, so data encrypted through the other route stays locked. In the second, the browser did not confirm identity verification under preferred; some runs worked after requesting required verification.</p>
       <p className="section-description">Each row is one setup we tested. The Creator encrypted a message; the Consumer tried to open it using the same passkey. The result shows whether that setup worked out of the box, needed changes or failed.</p>
       <div className="results-note">
