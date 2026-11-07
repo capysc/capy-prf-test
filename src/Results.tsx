@@ -4,7 +4,7 @@ export const LATEST_RESULTS_DATE = '2026-11-04';
 type VerificationPolicy = 'Preferred' | 'Required';
 
 type Comparison = Readonly<{
-  number: number | 'Earlier';
+  number: number;
   creator: readonly [string, string];
   consumer: readonly [string, string];
   verification: readonly [VerificationPolicy, VerificationPolicy];
@@ -16,9 +16,6 @@ type Comparison = Readonly<{
 }>;
 
 const comparisons: readonly Comparison[] = [
-  { number: 'Earlier', creator: ['iPhone Safari', '1Password'], consumer: ['iPhone Safari', '1Password'],
-    verification: ['Required', 'Required'], creatorKey: '—', consumerKey: '—', passes: false, failureStage: 'verification',
-    vendorAction: 'Investigate why the iOS PRF request fails with required verification. No encryption keys were available for comparison.' },
   { number: 1, creator: ['iPhone Safari', '1Password'], consumer: ['Chrome · QR', 'iPhone · 1Password'],
     verification: ['Preferred', 'Preferred'], creatorKey: 'P(x)', consumerKey: 'P(D(x))', passes: false,
     vendorAction: '1Password, Apple and Google should check why QR returns a different key from Safari for the same passkey and input. The responsible vendor is not yet known.' },
@@ -43,10 +40,13 @@ const comparisons: readonly Comparison[] = [
   { number: 8, creator: ['Desktop Chrome · direct', 'Chrome Password Manager'], consumer: ['iPhone Chrome', 'Chrome Password Manager'],
     verification: ['Required', 'Preferred'], creatorKey: 'P(x)', consumerKey: 'P(x)', passes: true,
     vendorAction: 'Google: investigate why the default desktop approval did not report identity verification. The stricter request worked and the keys matched.' },
-  { number: 9, creator: ['iPhone Safari', '1Password'], consumer: ['Desktop Chrome · direct', '1Password extension'],
+  { number: 9, creator: ['iPhone Safari', '1Password'], consumer: ['iPhone Safari', '1Password'],
+    verification: ['Required', 'Required'], creatorKey: '—', consumerKey: '—', passes: false, failureStage: 'verification',
+    vendorAction: 'Investigate why the iOS PRF request fails with required verification. No encryption keys were available for comparison.' },
+  { number: 10, creator: ['iPhone Safari', '1Password'], consumer: ['Desktop Chrome · direct', '1Password extension'],
     verification: ['Preferred', 'Preferred'], creatorKey: 'P(x)', consumerKey: 'P(x)', passes: true,
     vendorAction: '1Password: this direct extension route worked without changes. The key mismatch appeared in the earlier QR tests.' },
-  { number: 10, creator: ['Desktop Chrome · direct', '1Password extension'], consumer: ['iPhone Safari', '1Password'],
+  { number: 11, creator: ['Desktop Chrome · direct', '1Password extension'], consumer: ['iPhone Safari', '1Password'],
     verification: ['Required', 'Preferred'], creatorKey: 'P(x)', consumerKey: 'P(x)', passes: true,
     vendorAction: '1Password: check whether this also works with the default verification setting. This run used the stricter setting; it does not prove the default would fail.' },
 ];
@@ -107,7 +107,7 @@ export function ResultsPage() {
           </tr>)}</tbody>
         </table>
       </div>
-      <p className="results-note">The original 1Password iOS finding predates the numbered comparisons. Its working request changed both the verification setting to <code>"preferred"</code> and the PRF request to plain evaluation; the two changes were not isolated in that fix.</p>
+      <p className="results-note">The working 1Password iOS request changed both the verification setting to <code>"preferred"</code> and the PRF request to plain evaluation; the two changes were not isolated in that fix.</p>
       <p className="results-note"><strong>Who needs to fix this?</strong> It is not yet clear whether the fault is in 1Password, Apple’s passkey support or Chrome. The QR and direct-extension tests used different websites and passkeys. <a href="https://github.com/1Password/passkey-rs/blob/1606717bd9888b629905d435bb876b24b1aaddb5/passkey-types/src/webauthn/extensions/mod.rs#L36">1Password’s handling of Apple’s inputs</a> and <a href="https://chromium.googlesource.com/chromium/src/+/main/ios/chrome/credential_provider_extension/passkey_util.mm#37">Chrome’s iOS code</a> are places to investigate; they do not prove which vendor caused the mismatch.</p>
     </section>
 
