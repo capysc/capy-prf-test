@@ -4,17 +4,21 @@ export const LATEST_RESULTS_DATE = '2026-11-04';
 type VerificationPolicy = 'Preferred' | 'Required';
 
 type Comparison = Readonly<{
-  number: number;
+  number: number | 'Earlier';
   creator: readonly [string, string];
   consumer: readonly [string, string];
   verification: readonly [VerificationPolicy, VerificationPolicy];
   creatorKey: string;
   consumerKey: string;
   passes: boolean;
+  failureStage?: 'verification';
   vendorAction: string;
 }>;
 
 const comparisons: readonly Comparison[] = [
+  { number: 'Earlier', creator: ['iPhone Safari', '1Password'], consumer: ['iPhone Safari', '1Password'],
+    verification: ['Required', 'Required'], creatorKey: '—', consumerKey: '—', passes: false, failureStage: 'verification',
+    vendorAction: 'Investigate why the iOS PRF request fails with required verification. No encryption keys were available for comparison.' },
   { number: 1, creator: ['iPhone Safari', '1Password'], consumer: ['Chrome · QR', 'iPhone · 1Password'],
     verification: ['Preferred', 'Preferred'], creatorKey: 'P(x)', consumerKey: 'P(D(x))', passes: false,
     vendorAction: '1Password, Apple and Google should check why QR returns a different key from Safari for the same passkey and input. The responsible vendor is not yet known.' },
@@ -54,6 +58,9 @@ function Verdict({ passes }: Readonly<{ passes: boolean }>) {
 }
 
 function Outcome({ test }: Readonly<{ test: Comparison }>) {
+  if (test.failureStage === 'verification') {
+    return <span className="verdict verdict-fail"><span aria-hidden="true">−</span> Failed</span>;
+  }
   return test.passes && test.verification.includes('Required')
     ? <span className="verdict verdict-changes"><span aria-hidden="true">!</span> Needs changes</span>
     : <Verdict passes={test.passes} />;
@@ -63,8 +70,8 @@ function Path({ value }: Readonly<{ value: readonly [string, string] }>) {
   return <><span className="cell-primary">{value[0]}</span><span className="cell-secondary">{value[1]}</span></>;
 }
 
-function Policy({ value }: Readonly<{ value: VerificationPolicy }>) {
-  return <span className={value === 'Required' ? 'verification-required' : undefined}>{value}</span>;
+function Policy({ value, neutral = false }: Readonly<{ value: VerificationPolicy; neutral?: boolean }>) {
+  return <span className={value === 'Required' && !neutral ? 'verification-required' : undefined}>{value}</span>;
 }
 
 export function ResultsPage() {
@@ -94,20 +101,10 @@ export function ResultsPage() {
           <tbody>{comparisons.map((test) => <tr key={test.number}>
             <th scope="row" id={`test-${test.number}`}>{String(test.number).padStart(2, '0')}</th>
             <td><Path value={test.creator} /></td><td><Path value={test.consumer} /></td>
-            <td className="verification-cell"><Policy value={test.verification[0]} /><span className="cell-secondary">→ <Policy value={test.verification[1]} /></span></td>
+            <td className="verification-cell"><Policy value={test.verification[0]} neutral={test.failureStage === 'verification'} /><span className="cell-secondary">→ <Policy value={test.verification[1]} neutral={test.failureStage === 'verification'} /></span></td>
             <td className="key-cell"><code>{test.creatorKey}</code></td><td className="key-cell"><code>{test.consumerKey}</code></td>
             <td><Outcome test={test} /></td><td className="vendor-action-cell">{test.vendorAction}</td>
           </tr>)}</tbody>
-        </table>
-      </div>
-      <div className="table-scroll" role="region" aria-label="Verification settings" tabIndex={0}>
-        <table>
-          <caption>Verification settings</caption>
-          <thead><tr><th scope="col">Device / password manager</th><th scope="col"><Policy value="Preferred" /></th><th scope="col"><Policy value="Required" /></th></tr></thead>
-          <tbody>
-            <tr><th scope="row">1Password on iOS · original tests</th><td>Returned an encryption key and confirmed identity verification with plain PRF evaluation.</td><td>The PRF request failed.</td></tr>
-            <tr><th scope="row">Chrome Password Manager on desktop Chrome · Tests 7–8</th><td>Did not report identity verification. The test stopped before reading encryption keys.</td><td>Reported identity verification. Keys matched across devices and decryption succeeded.</td></tr>
-          </tbody>
         </table>
       </div>
       <p className="results-note">The original 1Password iOS finding predates the numbered comparisons. Its working request changed both the verification setting to <code>"preferred"</code> and the PRF request to plain evaluation; the two changes were not isolated in that fix.</p>
